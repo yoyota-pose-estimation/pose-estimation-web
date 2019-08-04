@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
 import * as posenet from '@tensorflow-models/posenet'
 import CameraError from './CameraError'
+import Loading from './Loading'
 import { isMobile, drawKeypoints } from './utils'
 
 const videoWidth = 600
@@ -68,6 +69,7 @@ export default function() {
   const videoRef = useRef()
   const canvasRef = useRef()
   const [cameraError, setCameraError] = useState(false)
+  const [loading, setLoading] = useState(true)
   async function setUp() {
     const video = await loadVideo(videoRef)
     if (!video) {
@@ -75,6 +77,7 @@ export default function() {
       return
     }
     const net = await loadNet()
+    setLoading(false)
     const ctx = canvasRef.current.getContext('2d')
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     estimatePose(ctx, net, video)
@@ -87,6 +90,7 @@ export default function() {
   }
   return (
     <div>
+      <Loading loading={loading} />
       <video ref={videoRef} style={{ display: 'none' }} />
       <canvas ref={canvasRef} height={videoHeight} width={videoWidth} />
     </div>
