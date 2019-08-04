@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
 import * as posenet from '@tensorflow-models/posenet'
+import CameraError from './CameraError'
 import { isMobile, drawKeypoints } from './utils'
 
 const videoWidth = 600
@@ -53,8 +54,7 @@ async function loadVideo(ref) {
   return video
 }
 
-async function estimatePose(ctx, video) {
-  const net = await loadNet()
+async function estimatePose(ctx, net, video) {
   async function estimate() {
     const pose = await net.estimateSinglePose(video)
     ctx.drawImage(video, 0, 0, video.width, video.height)
@@ -74,20 +74,16 @@ export default function() {
       setCameraError(true)
       return
     }
+    const net = await loadNet()
     const ctx = canvasRef.current.getContext('2d')
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    estimatePose(ctx, video, setCameraError)
+    estimatePose(ctx, net, video)
   }
   useEffect(() => {
     setUp()
   })
   if (cameraError) {
-    return (
-      <p>
-        this browser does not support video capture, or this device does not
-        have a camera
-      </p>
-    )
+    return <CameraError />
   }
   return (
     <div>
