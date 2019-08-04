@@ -1,3 +1,5 @@
+import * as posenet from '@tensorflow-models/posenet'
+
 function isAndroid() {
   return /Android/i.test(navigator.userAgent)
 }
@@ -8,6 +10,18 @@ function isiOS() {
 
 export function isMobile() {
   return isAndroid() || isiOS()
+}
+
+export function loadNet() {
+  if (isMobile) {
+    return posenet.load()
+  }
+  return posenet.load({
+    architecture: 'ResNet50',
+    outputStride: 32,
+    inputResolution: 257,
+    quantBytes: 2
+  })
 }
 
 function drawPoint(ctx, y, x, r, color = 'aqua') {

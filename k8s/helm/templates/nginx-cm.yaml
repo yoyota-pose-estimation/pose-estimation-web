@@ -28,6 +28,13 @@ data:
     server {
         listen       80;
         server_name  pose-estimation-web;
+
+        location /videostream.cgi {
+          {{- with .Values.cam }}
+          set $args {{ printf "user=%s&pwd=%s" .user .pwd }};
+          proxy_pass {{ .url }};
+          {{- end }}
+        }
         
         {{- if .Values.develop.enabled}}
         location / {
