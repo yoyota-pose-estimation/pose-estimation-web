@@ -91,7 +91,7 @@ export default function() {
   return (
     <div>
       <Loading loading={loading} />
-      <video ref={videoRef} style={{ display: 'none' }} />
+      <video playsInline ref={videoRef} style={{ display: 'none' }} />
       <canvas ref={canvasRef} height={videoHeight} width={videoWidth} />
     </div>
   )

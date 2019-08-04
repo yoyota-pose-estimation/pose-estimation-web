@@ -1,0 +1,10 @@
+ingress:
+  enabled: true
+  hosts:
+      - pose.dudaji.org
+  annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+  tls:
+  - hosts:
+      - "*.dudaji.org"

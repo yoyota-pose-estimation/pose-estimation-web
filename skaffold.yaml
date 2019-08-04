@@ -1,0 +1,22 @@
+apiVersion: skaffold/v1beta13
+kind: Config
+build:
+  artifacts:
+  - image: registry.dudaji.org/huhuta/pose-estimation-web
+    sync:
+      manual:
+        - src: 'src/**/*.js'
+          dest: .
+    docker:
+      target: install
+deploy:
+  helm:
+    releases:
+    - name: pose-estimation-web
+      namespace: office
+      chartPath: k8s/helm
+      setValueTemplates:
+        develop.repository: "{{.IMAGE_NAME}}"
+        develop.tag: "{{.DIGEST}}"
+      valuesFiles:
+        - k8s/values-files/dev-values.yaml
