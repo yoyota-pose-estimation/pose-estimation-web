@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
+import to from 'await-to-js'
 import * as posenet from '@tensorflow-models/posenet'
 import { isMobile, drawKeypoints } from './utils'
 
@@ -44,13 +45,15 @@ async function setupCamera(ref) {
 }
 
 async function loadVideo(ref) {
-  const video = await setupCamera(ref)
+  const [err, video] = await to(setupCamera(ref))
+  if (err) {
+    return null
+  }
   video.play()
   return video
 }
 
-async function estimatePose(videoRef, ctx) {
-  const video = await loadVideo(videoRef)
+async function estimatePose(ctx, video) {
   const net = await loadNet()
   async function estimate() {
     const pose = await net.estimateSinglePose(video)
@@ -64,11 +67,28 @@ async function estimatePose(videoRef, ctx) {
 export default function() {
   const videoRef = useRef()
   const canvasRef = useRef()
-  useEffect(() => {
+  const [cameraError, setCameraError] = useState(false)
+  async function setUp() {
+    const video = await loadVideo(videoRef)
+    if (!video) {
+      setCameraError(true)
+      return
+    }
     const ctx = canvasRef.current.getContext('2d')
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    estimatePose(videoRef, ctx)
+    estimatePose(ctx, video, setCameraError)
+  }
+  useEffect(() => {
+    setUp()
   })
+  if (cameraError) {
+    return (
+      <p>
+        this browser does not support video capture, or this device does not
+        have a camera
+      </p>
+    )
+  }
   return (
     <div>
       <video ref={videoRef} style={{ display: 'none' }} />
