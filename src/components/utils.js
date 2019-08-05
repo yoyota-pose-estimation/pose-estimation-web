@@ -24,7 +24,7 @@ export function loadNet() {
   })
 }
 
-function drawPoint(ctx, y, x, r, color = 'aqua') {
+function drawPoint(ctx, y, x, r, color = 'red') {
   ctx.beginPath()
   ctx.arc(x, y, r, 0, 2 * Math.PI)
   ctx.fillStyle = color
@@ -36,7 +36,9 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
     ({ score }) => score > minConfidence
   )
   confidentKeypoints.forEach((keypoint) => {
-    const { y, x } = keypoint.position
-    drawPoint(ctx, y * scale, x * scale, 3)
+    if (keypoint.part === 'rightEar' || keypoint.part === 'rightShoulder') {
+      const { y, x } = keypoint.position
+      drawPoint(ctx, y * scale, x * scale, 3)
+    }
   })
 }

@@ -1,0 +1,65 @@
+export default class {
+  constructor() {
+    this.up = 0
+    this.down = 0
+    this.count = 0
+    this.nose = null
+    this.neck = null
+    this.shoulder = null
+    this.elbow = null
+    this.wrist = null
+    this.ear = null
+    this.eye = null
+  }
+
+  upPosition() {
+    return this.elbow.y < this.shoulder.y
+  }
+
+  downPostionAfterUp() {
+    return this.up > this.elbow.y - 7
+  }
+
+  done() {
+    return this.wrist.y > this.elbow.y
+  }
+
+  checkPose(keypoints) {
+    const {
+      leftShoulder,
+      rightShoulder,
+      leftElbow,
+      rightElbow,
+      leftWrist,
+      rightWrist
+    } = keypoints
+    this.shoulder = leftShoulder || rightShoulder
+    this.elbow = leftElbow || rightElbow
+
+    const checkLists = [this.shoulder, this.elbow]
+    for (let i = 0; i < checkLists.length; i += 1) {
+      if (!checkLists[i]) {
+        return
+      }
+    }
+
+    if (this.upPosition()) {
+      this.up = Math.max(this.up, this.elbow.y)
+      return
+    }
+
+    if (this.downPostionAfterUp()) {
+      this.count += 1
+      this.up = 0
+      return
+    }
+
+    this.wrist = leftWrist || rightWrist
+    if (!this.wrist) {
+      return
+    }
+    if (this.done() && this.count > 0) {
+      this.count = 0
+    }
+  }
+}
