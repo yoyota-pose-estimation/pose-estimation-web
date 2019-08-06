@@ -1,11 +1,11 @@
 import React from 'react'
 import Estimator from './components/Estimator'
-// import Camera from './components/Camera'
-// import Webcam from './components/Webcam'
+import Camera from './components/Camera'
 
 function App() {
   return (
     <React.Fragment>
+      <Camera />
       <Estimator />
     </React.Fragment>
   )

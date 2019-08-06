@@ -3,9 +3,10 @@ import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
 import CameraError from './CameraError'
 import { isMobile } from './utils'
+import Webcam from './Webcam'
 
-const videoWidth = 600
-const videoHeight = 500
+const videoWidth = 300
+const videoHeight = 250
 
 async function setupCamera(ref) {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -50,7 +51,12 @@ export default function() {
     loadVideo()
   })
   if (cameraError) {
-    return <CameraError />
+    return (
+      <React.Fragment>
+        <CameraError />
+        <Webcam />
+      </React.Fragment>
+    )
   }
   return (
     <video

@@ -19,7 +19,7 @@ export default class {
       return
     }
     const ear = leftEar || rightEar
-    if (!nose) {
+    if (!nose || !ear) {
       return
     }
     const shoulder = nose.x > ear.x ? rightShoulder : leftShoulder
@@ -33,11 +33,9 @@ export default class {
         ? shoulder.x < ear.x - sensitivity
         : shoulder.x > ear.x + sensitivity
     this.dequePush(turtleNeck)
-    const trueLength = this.deque.filter((item) => item).length
-    console.log(trueLength)
+    this.count = this.deque.filter((item) => item).length
 
-    if (trueLength > 100) {
-      console.log('turtle Neck')
+    if (this.count > 100) {
       this.deque = []
     }
   }

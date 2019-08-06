@@ -3,7 +3,6 @@ import { loadNet, drawKeypoints } from './utils'
 import PullUpCounter from '../counters/pullUpCounter'
 import TurtleNeckCounter from '../counters/turtleNeckCounter'
 import Loading from './Loading'
-import Webcam from './Webcam'
 
 function filterConfidentPart(img, keypoints, minConfidence) {
   return keypoints.reduce((prev, curr) => {
@@ -17,13 +16,14 @@ function filterConfidentPart(img, keypoints, minConfidence) {
   }, {})
 }
 
-async function estimatePose(ctx, net, img) {
-  const counters = [new PullUpCounter(), new TurtleNeckCounter()]
+async function estimatePose(ctx, net, img, counters) {
   async function estimate() {
     const pose = await net.estimateSinglePose(img)
     const confidentKeypoints = filterConfidentPart(img, pose.keypoints, 0.5)
     counters.forEach((counter) => counter.checkPose(confidentKeypoints))
     ctx.drawImage(img, 0, 0, img.width, img.height)
+    const counts = counters.map((counter) => counter.count)
+    ctx.fillText(String(counts), 10, 10)
     drawKeypoints(pose.keypoints, 0.1, ctx)
   }
   setInterval(estimate, 100)
@@ -38,15 +38,19 @@ function getCtx(canvas) {
 export default function() {
   const canvasRef = useRef()
   const [loading, setLoading] = useState(true)
+  const counters = [new PullUpCounter(), new TurtleNeckCounter()]
   async function setUp() {
     const net = await loadNet()
     setLoading(false)
     const img = document.getElementById('input')
     const canvas = canvasRef.current
+    if (!img) {
+      return
+    }
     canvas.width = img.width
     canvas.height = img.height
     const ctx = getCtx(canvas)
-    estimatePose(ctx, net, img)
+    estimatePose(ctx, net, img, counters)
   }
   useEffect(() => {
     setUp()
@@ -54,8 +58,7 @@ export default function() {
   return (
     <React.Fragment>
       <Loading loading={loading} />
-      <Webcam />
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} style={{ height: '100%', width: '100%' }} />
     </React.Fragment>
   )
 }

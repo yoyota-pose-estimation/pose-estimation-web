@@ -36,11 +36,8 @@ export default class {
     this.shoulder = leftShoulder || rightShoulder
     this.elbow = leftElbow || rightElbow
 
-    const checkLists = [this.shoulder, this.elbow]
-    for (let i = 0; i < checkLists.length; i += 1) {
-      if (!checkLists[i]) {
-        return
-      }
+    if (!this.shoulder || !this.elbow) {
+      return
     }
 
     if (this.upPosition()) {
@@ -59,7 +56,7 @@ export default class {
       return
     }
     if (this.done() && this.count > 0) {
-      this.count = 0
+      // this.count = 0
     }
   }
 }

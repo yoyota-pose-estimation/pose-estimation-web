@@ -36,9 +36,7 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
     ({ score }) => score > minConfidence
   )
   confidentKeypoints.forEach((keypoint) => {
-    if (keypoint.part === 'rightEar' || keypoint.part === 'rightShoulder') {
-      const { y, x } = keypoint.position
-      drawPoint(ctx, y * scale, x * scale, 3)
-    }
+    const { y, x } = keypoint.position
+    drawPoint(ctx, y * scale, x * scale, 3)
   })
 }
