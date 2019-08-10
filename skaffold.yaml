@@ -16,10 +16,8 @@ deploy:
       namespace: office
       chartPath: k8s/helm
       setValueTemplates:
-        cam.url: "{{.CAM_URL}}"
-        cam.user: "{{.CAM_USER}}"
-        cam.pwd: "{{.CAM_PWD}}"
+        develop.enabled: true
         develop.repository: "{{.IMAGE_NAME}}"
         develop.tag: "{{.DIGEST}}"
       valuesFiles:
-        - k8s/values-files/dev-values.yaml
+        - k8s/values-files/values.yaml
