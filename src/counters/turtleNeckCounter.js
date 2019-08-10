@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import queryString from 'query-string'
 import axios from 'axios'
 
 export default class {
@@ -39,7 +40,9 @@ export default class {
 
     if (this.count > 100) {
       this.deque = []
-      axios.post(process.env.SLACK_URL, {
+
+      const { slackUrl } = queryString.parse(window.location.search)
+      axios.post(slackUrl, {
         username: 'test',
         text: 'turtle neck'
       })
