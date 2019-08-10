@@ -39,7 +39,6 @@ export default function() {
     const net = await loadNet()
     setLoading(false)
     const img = document.getElementById('input')
-    console.log(img.width, img.height)
     const canvas = canvasRef.current
     if (!img) {
       return
