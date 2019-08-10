@@ -1,4 +1,6 @@
 /* eslint-disable class-methods-use-this */
+import axios from 'axios'
+
 export default class {
   constructor() {
     this.count = 0
@@ -27,7 +29,7 @@ export default class {
       return
     }
 
-    const sensitivity = 12
+    const sensitivity = 0
     const turtleNeck =
       nose.x > ear.x
         ? shoulder.x < ear.x - sensitivity
@@ -37,6 +39,10 @@ export default class {
 
     if (this.count > 100) {
       this.deque = []
+      axios.post(process.env.SLACK_URL, {
+        username: 'test',
+        text: 'turtle neck'
+      })
     }
   }
 }

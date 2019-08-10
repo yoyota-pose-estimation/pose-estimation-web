@@ -17,7 +17,8 @@ export default class {
   }
 
   downPostionAfterUp() {
-    return this.up > this.elbow.y - 7
+    // return this.up > this.elbow.y - 7
+    return this.up > this.elbow.y - 2
   }
 
   done() {

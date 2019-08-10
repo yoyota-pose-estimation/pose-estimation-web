@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { loadNet, drawKeypoints } from './utils'
-import PullUpCounter from '../counters/pullUpCounter'
-import TurtleNeckCounter from '../counters/turtleNeckCounter'
+import counters from '../counters'
 import Loading from './Loading'
 
 function filterConfidentPart(img, keypoints, minConfidence) {
@@ -16,13 +15,13 @@ function filterConfidentPart(img, keypoints, minConfidence) {
   }, {})
 }
 
-async function estimatePose(ctx, net, img, counters) {
+async function estimatePose(ctx, net, img) {
   const pose = await net.estimateSinglePose(img)
   const confidentKeypoints = filterConfidentPart(img, pose.keypoints, 0.5)
   counters.forEach((counter) => counter.checkPose(confidentKeypoints))
   ctx.drawImage(img, 0, 0, img.width, img.height)
   const counts = counters.map((counter) => counter.count)
-  ctx.fillText(String(counts), 10, 10)
+  ctx.fillText(String(counts), 100, 100)
   drawKeypoints(pose.keypoints, 0.1, ctx)
 }
 
@@ -36,11 +35,11 @@ export default function() {
   let intervalId
   const canvasRef = useRef()
   const [loading, setLoading] = useState(true)
-  const counters = [new PullUpCounter(), new TurtleNeckCounter()]
   async function setUp() {
     const net = await loadNet()
     setLoading(false)
     const img = document.getElementById('input')
+    console.log(img.width, img.height)
     const canvas = canvasRef.current
     if (!img) {
       return
@@ -49,15 +48,19 @@ export default function() {
     canvas.height = img.height
     const ctx = getCtx(canvas)
     intervalId = setInterval(() => {
-      estimatePose(ctx, net, img, counters)
+      estimatePose(ctx, net, img)
     }, 100)
   }
-  useEffect(() => {
-    setUp()
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [])
+  useEffect(
+    () => {
+      setUp()
+      return () => {
+        clearInterval(intervalId)
+      }
+    },
+    [],
+    []
+  )
   return (
     <React.Fragment>
       <Loading loading={loading} />

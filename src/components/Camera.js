@@ -3,7 +3,6 @@ import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
 import CameraError from './CameraError'
 import { isMobile } from './utils'
-import Webcam from './Webcam'
 
 const videoWidth = 300
 const videoHeight = 250
@@ -54,7 +53,6 @@ export default function() {
     return (
       <React.Fragment>
         <CameraError />
-        <Webcam />
       </React.Fragment>
     )
   }
