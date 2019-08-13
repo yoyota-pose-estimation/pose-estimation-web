@@ -30,7 +30,7 @@ export default class {
       return
     }
 
-    const sensitivity = 0
+    const sensitivity = 4
     const turtleNeck =
       nose.x > ear.x
         ? shoulder.x < ear.x - sensitivity

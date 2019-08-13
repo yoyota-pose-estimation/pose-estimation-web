@@ -7,7 +7,7 @@ function getCounter() {
   const allCounter = { pullUpCounter, turtleNeckCounter }
 
   if (!parsed.counter) {
-    return allCounter
+    return Object.values(allCounter).map((V) => new V())
   }
 
   return parsed.counter.split(',').map((counter) => {
@@ -15,4 +15,5 @@ function getCounter() {
   })
 }
 
-export default getCounter()
+const counters = getCounter()
+export default counters

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { loadNet, drawKeypoints } from './utils'
+import { loadNet, getInput, drawKeypoints } from './utils'
 import counters from '../counters'
 import Loading from './Loading'
 
@@ -35,12 +35,15 @@ export default function() {
   let intervalId
   const canvasRef = useRef()
   const [loading, setLoading] = useState(true)
+  const [errorText, setErrorText] = useState('')
   async function setUp() {
     const net = await loadNet()
-    setLoading(false)
-    const img = document.getElementById('input')
     const canvas = canvasRef.current
+    const img = await getInput()
+    setLoading(false)
     if (!img) {
+      setErrorText(`this browser does not support video capture,
+         or this device does not have a camera`)
       return
     }
     canvas.width = img.width
@@ -50,18 +53,15 @@ export default function() {
       estimatePose(ctx, net, img)
     }, 100)
   }
-  useEffect(
-    () => {
-      setUp()
-      return () => {
-        clearInterval(intervalId)
-      }
-    },
-    [],
-    []
-  )
+  useEffect(() => {
+    setUp()
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
   return (
     <React.Fragment>
+      <p>{errorText}</p>
       <Loading loading={loading} />
       <canvas ref={canvasRef} style={{ height: '100%', width: '100%' }} />
     </React.Fragment>
