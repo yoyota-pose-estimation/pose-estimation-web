@@ -29,7 +29,7 @@ export function loadNet() {
   })
 }
 
-function drawPoint(ctx, y, x, r, color = 'red') {
+function drawPoint(ctx, y, x, r, color = 'aqua') {
   ctx.beginPath()
   ctx.arc(x, y, r, 0, 2 * Math.PI)
   ctx.fillStyle = color
