@@ -1,5 +1,6 @@
 export default class {
   constructor() {
+    this.name = 'pull up'
     this.up = 0
     this.down = 0
     this.count = 0

@@ -20,8 +20,13 @@ async function estimatePose(ctx, net, img) {
   const confidentKeypoints = filterConfidentPart(img, pose.keypoints, 0.5)
   counters.forEach((counter) => counter.checkPose(confidentKeypoints))
   ctx.drawImage(img, 0, 0, img.width, img.height)
-  const counts = counters.map((counter) => counter.count)
-  ctx.fillText(String(counts), 100, 100)
+
+  ctx.font = '15px Verdana'
+  ctx.fillStyle = 'black'
+  counters.forEach(({ name, count }, index) => {
+    const text = `${name}: ${count}`
+    ctx.fillText(text, 5, 20 * (index + 1))
+  })
   drawKeypoints(pose.keypoints, 0.1, ctx)
 }
 

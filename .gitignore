@@ -24,3 +24,7 @@ yarn-error.log*
 
 ## hates
 .env
+*.crt
+*.key
+public/mobilenet
+*.conf

@@ -4,6 +4,7 @@ import axios from 'axios'
 
 export default class {
   constructor() {
+    this.name = 'turtle neck'
     this.count = 0
     this.deque = []
     this.maxlen = 200
