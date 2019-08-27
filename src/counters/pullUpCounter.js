@@ -11,6 +11,7 @@ export default class {
     this.wrist = null
     this.ear = null
     this.eye = null
+    this.beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
   }
 
   upPosition() {
@@ -18,7 +19,6 @@ export default class {
   }
 
   downPostionAfterUp() {
-    // return this.up > this.elbow.y - 7
     return this.up > this.elbow.y - 2
   }
 
@@ -48,6 +48,7 @@ export default class {
     }
 
     if (this.downPostionAfterUp()) {
+      this.beep.play()
       this.count += 1
       this.up = 0
       return

@@ -4,6 +4,7 @@ import turtleNeckCounter from './turtleNeckCounter'
 
 function getCounter() {
   const parsed = queryString.parse(window.location.search)
+  console.log(parsed)
   const allCounter = { pullUpCounter, turtleNeckCounter }
 
   if (!parsed.counter) {
