@@ -59,7 +59,7 @@ export default class {
       return
     }
     if (this.done() && this.count > 0) {
-      // this.count = 0
+      this.count = 0
     }
   }
 }
