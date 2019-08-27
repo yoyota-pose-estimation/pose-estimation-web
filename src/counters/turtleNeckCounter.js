@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import queryString from 'query-string'
-import axios from 'axios'
+import { sendSlackMessage } from './utils'
 
 export default class {
   constructor() {
@@ -56,12 +55,7 @@ export default class {
 
     if (this.count > 100) {
       this.deque = []
-
-      const { slackUrl } = queryString.parse(window.location.search)
-      axios.post(slackUrl, {
-        username: 'test',
-        text: 'turtle neck'
-      })
+      sendSlackMessage('turtle neck')
     }
   }
 }

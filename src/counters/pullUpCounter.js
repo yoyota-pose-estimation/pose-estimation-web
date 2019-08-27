@@ -1,3 +1,5 @@
+import { beep } from './utils'
+
 export default class {
   constructor() {
     this.name = 'pull up'
@@ -11,7 +13,6 @@ export default class {
     this.wrist = null
     this.ear = null
     this.eye = null
-    this.beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
   }
 
   upPosition() {
@@ -48,7 +49,7 @@ export default class {
     }
 
     if (this.downPostionAfterUp()) {
-      this.beep.play()
+      beep.play()
       this.count += 1
       this.up = 0
       return

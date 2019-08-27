@@ -1,6 +1,17 @@
-import * as posenet from '@tensorflow-models/posenet'
-import queryString from 'query-string'
+import axios from 'axios'
 import to from 'await-to-js'
+import queryString from 'query-string'
+import * as posenet from '@tensorflow-models/posenet'
+
+export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
+
+export function sendSlackMessage(text) {
+  const { slackUrl } = queryString.parse(window.location.search)
+  axios.post(slackUrl, {
+    text,
+    username: 'poseNet'
+  })
+}
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent)
