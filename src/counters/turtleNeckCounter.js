@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import { sendSlackMessage } from './utils'
+import Counter from './counter'
 
-export default class {
+export default class extends Counter {
   constructor() {
-    this.name = 'turtle neck'
-    this.count = 0
+    super()
+    this.name = 'turtleNeck'
     this.deque = []
     this.maxlen = 200
   }
@@ -54,8 +54,8 @@ export default class {
     this.count = this.deque.filter((item) => item).length
 
     if (this.count > 100) {
+      this.notify()
       this.deque = []
-      sendSlackMessage('turtle neck')
     }
   }
 }

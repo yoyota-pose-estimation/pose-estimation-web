@@ -1,18 +1,11 @@
-import { beep, save } from './utils'
+import { beep } from './utils'
+import Counter from './counter'
 
-export default class {
+export default class extends Counter {
   constructor() {
+    super()
     this.name = 'pullUp'
     this.up = 0
-    this.down = 0
-    this.count = 0
-    this.nose = null
-    this.neck = null
-    this.shoulder = null
-    this.elbow = null
-    this.wrist = null
-    this.ear = null
-    this.eye = null
   }
 
   upPosition() {
@@ -60,7 +53,7 @@ export default class {
       return
     }
     if (this.done() && this.count > 0) {
-      save(this.name, this.count)
+      this.notify()
       this.count = 0
     }
   }
