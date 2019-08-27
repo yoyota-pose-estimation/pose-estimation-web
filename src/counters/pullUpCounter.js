@@ -1,8 +1,8 @@
-import { beep } from './utils'
+import { beep, save } from './utils'
 
 export default class {
   constructor() {
-    this.name = 'pull up'
+    this.name = 'pullUp'
     this.up = 0
     this.down = 0
     this.count = 0
@@ -60,6 +60,7 @@ export default class {
       return
     }
     if (this.done() && this.count > 0) {
+      save(this.name, this.count)
       this.count = 0
     }
   }

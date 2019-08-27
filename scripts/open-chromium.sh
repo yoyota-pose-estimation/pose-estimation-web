@@ -2,4 +2,4 @@
  --hide-scrollbars \
  --disable-web-security \
  --user-data-dir=/tmp/chrome \
- https://pose.dudaji.org/\?camUrl\=$CAM_URL\&slackUrl=$SLACK_URL\&counter=turtleNeck
+ https://pose.dudaji.org/\?camUrl\=$CAM_URL\&slackUrl=$SLACK_URL\&counter=turtleNeck\&influxdb=$INFLUXDB
