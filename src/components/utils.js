@@ -15,9 +15,6 @@ export function isMobile() {
 }
 
 export function loadNet() {
-  // return posenet.load({
-  //   modelUrl: `${process.env.PUBLIC_URL}/mobilenet/model-stride16.json`
-  // })
   if (isMobile()) {
     return posenet.load()
   }

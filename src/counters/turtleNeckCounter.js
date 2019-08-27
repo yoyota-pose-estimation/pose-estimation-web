@@ -18,7 +18,17 @@ export default class {
   }
 
   checkPose(keypoints) {
-    const { nose, leftShoulder, rightShoulder, leftEar, rightEar } = keypoints
+    const {
+      nose,
+      leftEar,
+      rightEar,
+      leftHip,
+      rightHip,
+      leftKnee,
+      rightKnee,
+      leftShoulder,
+      rightShoulder
+    } = keypoints
     if (leftEar && rightEar) {
       return
     }
@@ -26,12 +36,17 @@ export default class {
     if (!nose || !ear) {
       return
     }
-    const shoulder = nose.x > ear.x ? rightShoulder : leftShoulder
-    if (!shoulder) {
+
+    const direction = nose.x > ear.x
+    const hip = direction ? rightHip : leftHip
+    const knee = direction ? rightKnee : leftKnee
+    const shoulder = direction ? rightShoulder : leftShoulder
+    if (!hip || !knee || !shoulder) {
       return
     }
 
-    const sensitivity = 4
+    const sit = Math.round(knee.x - hip.x) > 20
+    const sensitivity = sit ? 0 : 4
     const turtleNeck =
       nose.x > ear.x
         ? shoulder.x < ear.x - sensitivity
