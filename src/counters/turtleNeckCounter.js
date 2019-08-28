@@ -43,13 +43,12 @@ export default class extends Counter {
     if (!hip || !knee || !shoulder) {
       return
     }
-
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? 0 : 4
-    const turtleNeck =
-      nose.x > ear.x
-        ? shoulder.x < ear.x - sensitivity
-        : shoulder.x > ear.x + sensitivity
+    const sensitivity = sit ? this.sensitivity + 4 : this.sensitivity
+    const turtleNeck = direction
+      ? shoulder.x < ear.x - sensitivity
+      : shoulder.x > ear.x + sensitivity
+
     this.dequePush(turtleNeck)
     this.count = this.deque.filter((item) => item).length
 

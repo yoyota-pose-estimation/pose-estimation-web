@@ -4,8 +4,8 @@ import Counter from './counter'
 export default class extends Counter {
   constructor() {
     super()
-    this.name = 'pullUp'
     this.up = 0
+    this.name = 'pullUp'
   }
 
   upPosition() {
@@ -13,7 +13,7 @@ export default class extends Counter {
   }
 
   downPostionAfterUp() {
-    return this.up > this.elbow.y - 2
+    return this.up > this.elbow.y - this.sensitivity
   }
 
   done() {
