@@ -40,14 +40,14 @@ spec:
               containerPort: 80
               protocol: TCP
           {{- if not .Values.develop.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
