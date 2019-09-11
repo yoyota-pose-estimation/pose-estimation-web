@@ -27,9 +27,7 @@ export default class extends Counter {
       leftHip,
       rightHip,
       leftKnee,
-      rightKnee,
-      leftShoulder,
-      rightShoulder
+      rightKnee
     } = keypoints
     if (leftEar && rightEar) {
       return
@@ -44,15 +42,14 @@ export default class extends Counter {
     const direction = true
     const hip = direction ? rightHip : leftHip
     const knee = direction ? rightKnee : leftKnee
-    const shoulder = direction ? rightShoulder : leftShoulder
-    if (!hip || !knee || !shoulder) {
+    if (!hip || !knee) {
       return
     }
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? this.sensitivity + 5 : this.sensitivity
+    const sensitivity = sit ? this.sensitivity - 4 : this.sensitivity
     const turtleNeck = direction
-      ? shoulder.x < ear.x - sensitivity
-      : shoulder.x > ear.x + sensitivity
+      ? hip.x < ear.x - sensitivity
+      : hip.x > ear.x + sensitivity
 
     this.dequePush(turtleNeck, this.turtleNeckDeque)
     this.count = this.turtleNeckDeque.filter((item) => item).length
