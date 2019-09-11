@@ -49,7 +49,7 @@ export default class extends Counter {
       return
     }
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? this.sensitivity + 3 : this.sensitivity
+    const sensitivity = sit ? this.sensitivity + 5 : this.sensitivity
     const turtleNeck = direction
       ? shoulder.x < ear.x - sensitivity
       : shoulder.x > ear.x + sensitivity
@@ -66,7 +66,8 @@ export default class extends Counter {
 
     this.dequePush(this.count < 1, this.normalDeque)
     const normalCount = this.normalDeque.filter((item) => item).length
-    if (normalCount > 100) {
+    if (normalCount > 10) {
+      this.normalDeque = []
       save(this.name, 1)
     }
   }

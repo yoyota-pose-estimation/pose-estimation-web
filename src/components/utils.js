@@ -45,8 +45,9 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 }
 
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
+  const parts = { rightShoulder: '', rightEar: '' }
   const confidentKeypoints = keypoints.filter(
-    ({ score }) => score > minConfidence
+    ({ score, part }) => score > minConfidence && part in parts
   )
   confidentKeypoints.forEach((keypoint) => {
     const { y, x } = keypoint.position
