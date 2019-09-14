@@ -50,9 +50,12 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
-    leftHip: true,
-    leftKnee: true
-    // rightEar: true,
+    nose: true,
+    // leftEar: true,
+    leftWrist: true,
+    leftKnee: true,
+    // leftHip: true,
+    rightEar: true
     // rightElbow: true,
     // rightWrist: true,
   }
