@@ -3,6 +3,9 @@ import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
 
+const width = 300
+const height = 250
+
 export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
 
 export function sendSlackMessage(text) {
@@ -46,7 +49,12 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
-  const parts = { rightHip: true, rightEar: true }
+  const parts = {
+    rightHip: true,
+    rightEar: true,
+    rightElbow: true,
+    rightWrist: true
+  }
   const confidentKeypoints = keypoints.filter(
     ({ score, part }) => score > minConfidence && part in parts
   )
@@ -56,9 +64,6 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   })
 }
 
-const videoWidth = 300
-const videoHeight = 250
-
 async function setupCamera() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     throw new Error(
@@ -66,16 +71,16 @@ async function setupCamera() {
     )
   }
   const video = document.createElement('video')
-  video.width = videoWidth
-  video.height = videoHeight
+  video.width = width
+  video.height = height
 
   const mobile = isMobile()
   const stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: {
       facingMode: 'user',
-      width: mobile ? undefined : videoWidth,
-      height: mobile ? undefined : videoHeight
+      width: mobile ? undefined : width,
+      height: mobile ? undefined : height
     }
   })
   video.srcObject = stream
@@ -91,7 +96,7 @@ async function setupCamera() {
 export async function getInput() {
   const { camUrl } = queryString.parse(window.location.search)
   if (camUrl) {
-    const img = new Image(300, 250)
+    const img = new Image(width, height)
     img.src = camUrl
     return img
   }
