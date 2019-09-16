@@ -16,6 +16,12 @@ export function sendSlackMessage(text) {
   })
 }
 
+export function captureImage(section, label) {
+  axios.get(
+    `https://capture-trigger.dudaji.org/api/capture/${section}/${label || ''}`
+  )
+}
+
 const influx = influxdb ? new Influx.InfluxDB(influxdb) : null
 
 if (influx) {

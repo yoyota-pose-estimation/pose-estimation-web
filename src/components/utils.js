@@ -50,11 +50,12 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
-    nose: true,
+    // nose: true,
     // leftEar: true,
-    leftWrist: true,
-    leftKnee: true,
+    // leftWrist: true,
+    // leftKnee: true,
     // leftHip: true,
+    rightHip: true,
     rightEar: true
     // rightElbow: true,
     // rightWrist: true,
@@ -101,6 +102,7 @@ export async function getInput() {
   const { camUrl } = queryString.parse(window.location.search)
   if (camUrl) {
     const img = new Image(width, height)
+    img.crossOrigin = 'Anonymous'
     img.src = camUrl
     return img
   }

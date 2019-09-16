@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Counter from './counter'
-import { save } from './utils'
+import { save, captureImage } from './utils'
 
 export default class extends Counter {
   constructor() {
@@ -55,6 +55,7 @@ export default class extends Counter {
     this.count = this.turtleNeckDeque.filter((item) => item).length
 
     if (this.count > 100) {
+      captureImage('turtleNeck', 'true')
       this.notify()
       this.turtleNeckDeque = []
       this.turtleNeck = true
@@ -63,7 +64,8 @@ export default class extends Counter {
 
     this.dequePush(this.count < 1, this.normalDeque)
     const normalCount = this.normalDeque.filter((item) => item).length
-    if (normalCount > 10) {
+    if (normalCount > 100) {
+      captureImage('turtleNeck', 'false')
       this.normalDeque = []
       save(this.name, 1)
     }
