@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
+import to from 'await-to-js'
 import { loadNet, getInput, drawKeypoints } from './utils'
 import counters from '../counters'
 import Loading from './Loading'
@@ -16,7 +17,11 @@ function filterConfidentPart(img, keypoints, minConfidence) {
 }
 
 async function estimatePose(ctx, net, img) {
-  const pose = await net.estimateSinglePose(img)
+  const [err, pose] = await to(net.estimateSinglePose(img))
+  if (err) {
+    window.location.reload()
+    return
+  }
   const confidentKeypoints = filterConfidentPart(img, pose.keypoints, 0.5)
   counters.forEach((counter) => counter.checkPose(confidentKeypoints))
   ctx.drawImage(img, 0, 0, img.width, img.height)
