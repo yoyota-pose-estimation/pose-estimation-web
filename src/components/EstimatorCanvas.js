@@ -6,7 +6,7 @@ export default function({ errorText, loading, canvasRef }) {
     <React.Fragment>
       <p>{errorText}</p>
       <Loading loading={loading} />
-      <canvas ref={canvasRef} style={{ height: '100%' }} />
+      <canvas ref={canvasRef} style={{ width: '100%' }} />
     </React.Fragment>
   )
 }

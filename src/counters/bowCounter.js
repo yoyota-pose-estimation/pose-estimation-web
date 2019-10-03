@@ -5,27 +5,45 @@ export default class extends Counter {
   constructor(canvas) {
     super(canvas)
     this.name = 'bow'
-    this.bow = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : 60
+    this.stand = true
+    this.down = false
+    this.sensitivity = this.sensitivity ? this.sensitivity : 5
+    this.captured = false
+  }
+
+  captureTrueImage() {
+    if (!this.captured) {
+      this.captured = true
+      this.captureImage('true')
+    }
   }
 
   checkPose(keypoints) {
-    const { leftKnee, leftEar } = keypoints
-    const knee = leftKnee
-    const ear = leftEar
-    if (!ear || !knee) {
+    const { rightEar, rightHip, rightKnee } = keypoints
+    const ear = rightEar
+    const hip = rightHip
+    const knee = rightKnee
+    if (!ear || !hip || !knee) {
       return
     }
 
-    const bow = Math.abs(knee.y - ear.y) < this.sensitivity
+    const down = hip.y < ear.y + this.sensitivity
 
-    if (!this.bow && bow) {
-      this.count += 1
-      this.bow = true
-      beep.play()
+    if (down) {
+      this.down = true
       this.uploadImage('true')
+      this.captureTrueImage()
+      return
     }
-    this.uploadImage('false')
-    this.bow = bow
+
+    const up = Math.round(knee.x - hip.x) < 10
+    if (this.down && up) {
+      this.count += 1
+      this.down = false
+      this.uploadImage('false')
+      this.captureImage('false')
+      this.captured = false
+      beep.play()
+    }
   }
 }

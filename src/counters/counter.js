@@ -23,13 +23,16 @@ export default class {
     this.sensitivity = parseInt(sensitivity, 10) || 0
   }
 
-  notify() {
+  alert() {
     sendSlackMessage(`${this.name}: ${this.count}`)
-    saveToInfluxDb(this.name, this.count)
+  }
+
+  writeMeasurement(count = this.count) {
+    saveToInfluxDb(this.name, count)
   }
 
   captureImage(label) {
-    captureImageToMinio(this.name, label)
+    return captureImageToMinio(this.name, label)
   }
 
   uploadImage(label) {
@@ -39,7 +42,7 @@ export default class {
     this.canvas.toBlob((file) => {
       const data = new FormData()
       data.append('image', file, `browser-${new Date().toUTCString()}.jpg`)
-      uploadImageToMinio(this.name, label, data)
+      return uploadImageToMinio(this.name, label, data)
     }, 'image/jpeg')
   }
 }

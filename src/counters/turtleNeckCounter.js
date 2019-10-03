@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import Counter from './counter'
-import { saveToInfluxDb, captureImageToMinio } from './utils'
 
 export default class extends Counter {
   constructor(canvas) {
@@ -50,14 +49,14 @@ export default class extends Counter {
     const turtleNeck = direction
       ? hip.x < ear.x - sensitivity
       : hip.x > ear.x + sensitivity
-
+    this.uploadImage(turtleNeck.toString())
     this.dequePush(turtleNeck, this.turtleNeckDeque)
     this.count = this.turtleNeckDeque.filter((item) => item).length
 
     if (this.count > 100) {
       this.captureImage('true')
-      this.uploadImage('true')
-      this.notify()
+      this.alert()
+      this.writeMeasurement()
       this.turtleNeckDeque = []
       this.turtleNeck = true
       return
@@ -67,9 +66,8 @@ export default class extends Counter {
     const normalCount = this.normalDeque.filter((item) => item).length
     if (normalCount > 100) {
       this.captureImage('false')
-      this.uploadImage('false')
       this.normalDeque = []
-      saveToInfluxDb(this.name, 1)
+      this.writeMeasurement(1)
     }
   }
 }

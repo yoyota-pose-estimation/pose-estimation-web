@@ -6,8 +6,6 @@ import * as posenet from '@tensorflow-models/posenet'
 const width = 300
 const height = 250
 
-export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
-
 export function sendSlackMessage(text) {
   const { slackUrl } = queryString.parse(window.location.search)
   axios.post(slackUrl, {
@@ -50,15 +48,18 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
-    // nose: true,
+    nose: true,
+    rightAnkle: true,
     // leftEar: true,
     // leftWrist: true,
-    // leftKnee: true,
+    // leftKnee: true
     // leftHip: true,
     rightHip: true,
-    rightEar: true
-    // rightElbow: true,
-    // rightWrist: true,
+    rightKnee: true,
+    rightEye: true,
+    rightEar: true,
+    // rightElbow: true
+    rightWrist: true
   }
   const confidentKeypoints = keypoints.filter(
     ({ score, part }) => score > minConfidence && part in parts

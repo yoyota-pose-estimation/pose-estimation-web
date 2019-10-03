@@ -53,7 +53,7 @@ export default class extends Counter {
       return
     }
     if (this.done() && this.count > 0) {
-      this.notify()
+      this.alert()
       this.count = 0
     }
   }

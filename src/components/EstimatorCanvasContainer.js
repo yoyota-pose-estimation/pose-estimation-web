@@ -22,7 +22,7 @@ function drawCanvas(ctx, img, counters, keypoints) {
   ctx.fillStyle = 'black'
   counters.forEach(({ name, count }, index) => {
     const text = `${name}: ${count}`
-    ctx.fillText(text, 5, 20 * (index + 1))
+    ctx.fillText(text, 200, 20 * (index + 1))
   })
   // drawKeypoints(keypoints, 0.1, ctx)
 }
