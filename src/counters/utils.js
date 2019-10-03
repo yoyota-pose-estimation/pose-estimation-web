@@ -16,9 +16,16 @@ export function sendSlackMessage(text) {
   })
 }
 
-export function captureImage(section, label) {
+export function captureImageToMinio(section, label) {
   axios.get(
     `https://capture-trigger.dudaji.org/api/capture/${section}/${label || ''}`
+  )
+}
+
+export function uploadImageToMinio(section, label, file) {
+  axios.post(
+    `https://multipart-to-minio.dudaji.org/upload/${section}/${label || ''}`,
+    file
   )
 }
 
@@ -39,7 +46,7 @@ if (influx) {
     })
 }
 
-export function save(measurement, count) {
+export function saveToInfluxDb(measurement, count) {
   if (!influx) {
     return
   }

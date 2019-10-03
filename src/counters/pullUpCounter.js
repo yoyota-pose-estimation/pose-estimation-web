@@ -2,8 +2,8 @@ import { beep } from './utils'
 import Counter from './counter'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.up = 0
     this.name = 'pullUp'
   }

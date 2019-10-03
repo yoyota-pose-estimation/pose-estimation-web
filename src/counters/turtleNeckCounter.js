@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import Counter from './counter'
-import { save, captureImage } from './utils'
+import { saveToInfluxDb, captureImageToMinio } from './utils'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.name = 'turtleNeck'
     this.turtleNeckDeque = []
     this.normalDeque = []
@@ -55,7 +55,8 @@ export default class extends Counter {
     this.count = this.turtleNeckDeque.filter((item) => item).length
 
     if (this.count > 100) {
-      captureImage('turtleNeck', 'true')
+      this.captureImage('true')
+      this.uploadImage('true')
       this.notify()
       this.turtleNeckDeque = []
       this.turtleNeck = true
@@ -65,9 +66,10 @@ export default class extends Counter {
     this.dequePush(this.count < 1, this.normalDeque)
     const normalCount = this.normalDeque.filter((item) => item).length
     if (normalCount > 100) {
-      captureImage('turtleNeck', 'false')
+      this.captureImage('false')
+      this.uploadImage('false')
       this.normalDeque = []
-      save(this.name, 1)
+      saveToInfluxDb(this.name, 1)
     }
   }
 }

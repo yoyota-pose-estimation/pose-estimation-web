@@ -2,8 +2,8 @@ import { beep } from './utils'
 import Counter from './counter'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.name = 'bow'
     this.bow = false
     this.sensitivity = this.sensitivity ? this.sensitivity : 60
@@ -23,8 +23,9 @@ export default class extends Counter {
       this.count += 1
       this.bow = true
       beep.play()
+      this.uploadImage('true')
     }
-
+    this.uploadImage('false')
     this.bow = bow
   }
 }

@@ -24,7 +24,7 @@ function drawCanvas(ctx, img, counters, keypoints) {
     const text = `${name}: ${count}`
     ctx.fillText(text, 5, 20 * (index + 1))
   })
-  drawKeypoints(keypoints, 0.1, ctx)
+  // drawKeypoints(keypoints, 0.1, ctx)
 }
 
 async function estimatePose(ctx, net, img, counters) {
@@ -55,7 +55,7 @@ function getCtx(canvas) {
 function setEstimateInterval(net, img, canvasRef, setIntervalId) {
   const canvas = getCanvas(canvasRef, img)
   const ctx = getCtx(canvas)
-  const counters = getCounter(img)
+  const counters = getCounter(canvas)
   const intervalId = setInterval(() => {
     estimatePose(ctx, net, img, counters)
   }, 100)
