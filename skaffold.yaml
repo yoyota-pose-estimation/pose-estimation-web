@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta13
+apiVersion: skaffold/v1beta14
 kind: Config
 profiles:
   - name: dev
@@ -22,7 +22,7 @@ profiles:
             setValueTemplates:
               develop.enabled: true
               develop.repository: "{{.IMAGE_NAME}}"
-              develop.tag: "{{.DIGEST}}"
+              develop.tag: "{{.DIGEST_HEX}}"
             valuesFiles:
               - k8s/values-files/values.yaml
   - name: run
@@ -39,6 +39,6 @@ profiles:
             chartPath: k8s/helm
             setValueTemplates:
               image.repository: "{{.IMAGE_NAME}}"
-              image.tag: "{{.DIGEST}}"
+              image.tag: "{{.DIGEST_HEX}}"
             valuesFiles:
               - k8s/values-files/values.yaml

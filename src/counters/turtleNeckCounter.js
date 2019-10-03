@@ -46,7 +46,7 @@ export default class extends Counter {
       return
     }
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? this.sensitivity - 4 : this.sensitivity
+    const sensitivity = sit ? this.sensitivity - 2 : this.sensitivity
     const turtleNeck = direction
       ? hip.x < ear.x - sensitivity
       : hip.x > ear.x + sensitivity

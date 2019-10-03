@@ -1,10 +1,10 @@
 import React from 'react'
-import Estimator from './components/Estimator'
+import EstimatorCanvasContainer from './components/EstimatorCanvasContainer'
 
 function App() {
   return (
     <React.Fragment>
-      <Estimator />
+      <EstimatorCanvasContainer />
     </React.Fragment>
   )
 }
