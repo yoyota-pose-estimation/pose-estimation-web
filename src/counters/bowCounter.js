@@ -7,23 +7,16 @@ export default class extends Counter {
     this.name = 'bow'
     this.stand = true
     this.down = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : 5
-    this.captured = false
-  }
-
-  captureTrueImage() {
-    if (!this.captured) {
-      this.captured = true
-      this.captureImage('true')
-    }
+    this.sensitivity = this.sensitivity ? this.sensitivity : 8
   }
 
   checkPose(keypoints) {
-    const { rightEar, rightHip, rightKnee } = keypoints
+    const { rightEar, rightHip, rightKnee, rightAnkle } = keypoints
     const ear = rightEar
     const hip = rightHip
     const knee = rightKnee
-    if (!ear || !hip || !knee) {
+    const ankle = rightAnkle
+    if (!ear || !hip || !knee || !ankle) {
       return
     }
 
@@ -36,13 +29,14 @@ export default class extends Counter {
       return
     }
 
-    const up = Math.round(knee.x - hip.x) < 10
+    const up = Math.round(ankle.y - ear.y) > 145
+    if (up) {
+      this.uploadImage('false')
+    }
+
     if (this.down && up) {
       this.count += 1
       this.down = false
-      this.uploadImage('false')
-      this.captureImage('false')
-      this.captured = false
       beep.play()
     }
   }
