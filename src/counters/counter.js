@@ -32,7 +32,7 @@ export default class {
     }
     this.canvas.toBlob((file) => {
       const data = new FormData()
-      data.append('image', file, `browser-${new Date().toISOString()}.jpg`)
+      data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
       return uploadImageToMinio(this.name, label, data)
     }, 'image/jpeg')
   }
