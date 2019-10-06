@@ -4,7 +4,6 @@ import queryString from 'query-string'
 const Influx = require('influx')
 
 export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
-const beep2 = new Audio('https://www.soundjay.com/button/beep-02.mp3')
 
 const { slackUrl, influxdb } = queryString.parse(window.location.search)
 export function sendSlackMessage(text) {
@@ -15,13 +14,6 @@ export function sendSlackMessage(text) {
     text,
     username: 'poseNet'
   })
-}
-
-export async function captureImageToMinio(section, label) {
-  await axios.get(
-    `https://capture-trigger.dudaji.org/api/capture/${section}/${label || ''}`
-  )
-  beep2.play()
 }
 
 export async function uploadImageToMinio(section, label, file) {

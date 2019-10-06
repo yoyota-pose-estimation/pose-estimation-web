@@ -58,7 +58,7 @@ function setEstimateInterval(net, img, canvasRef, setIntervalId) {
   const counters = getCounter(canvas)
   const intervalId = setInterval(() => {
     estimatePose(ctx, net, img, counters)
-  }, 100)
+  }, 20)
   setIntervalId(intervalId)
 }
 

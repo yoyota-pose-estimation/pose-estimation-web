@@ -1,10 +1,5 @@
 import queryString from 'query-string'
-import {
-  captureImageToMinio,
-  saveToInfluxDb,
-  sendSlackMessage,
-  uploadImageToMinio
-} from './utils'
+import { saveToInfluxDb, sendSlackMessage, uploadImageToMinio } from './utils'
 
 const { sensitivity } = queryString.parse(window.location.search)
 
@@ -29,10 +24,6 @@ export default class {
 
   writeMeasurement(count = this.count) {
     saveToInfluxDb(this.name, count)
-  }
-
-  captureImage(label) {
-    return captureImageToMinio(this.name, label)
   }
 
   uploadImage(label) {
