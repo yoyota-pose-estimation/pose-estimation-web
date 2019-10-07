@@ -7,7 +7,7 @@ export default class extends Counter {
     this.name = 'bow'
     this.stand = true
     this.down = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : 8
+    this.sensitivity = this.sensitivity ? this.sensitivity : -2
   }
 
   checkPose(keypoints) {
@@ -23,6 +23,9 @@ export default class extends Counter {
     const down = hip.y < ear.y + this.sensitivity
 
     if (down) {
+      if (!this.down) {
+        beep.play()
+      }
       this.down = true
       this.uploadImage('true')
       return

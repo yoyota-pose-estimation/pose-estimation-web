@@ -1,7 +1,7 @@
 import queryString from 'query-string'
 import { saveToInfluxDb, sendSlackMessage, uploadImageToMinio } from './utils'
 
-const { sensitivity } = queryString.parse(window.location.search)
+const { sensitivity, upload } = queryString.parse(window.location.search)
 
 export default class {
   constructor(canvas) {
@@ -27,6 +27,9 @@ export default class {
   }
 
   uploadImage(label) {
+    if (!upload) {
+      return
+    }
     if (!this.canvas) {
       return
     }

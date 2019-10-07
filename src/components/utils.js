@@ -48,18 +48,19 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
-    nose: true,
+    // nose: true,
+    rightEar: true,
     rightAnkle: true,
+    rightShoulder: true
     // leftEar: true,
     // leftWrist: true,
     // leftKnee: true
     // leftHip: true,
-    rightHip: true,
-    rightKnee: true,
-    rightEye: true,
-    rightEar: true,
+    // rightHip: true,
+    // rightKnee: true,
+    // rightEye: true,
     // rightElbow: true
-    rightWrist: true
+    // rightWrist: true
   }
   const confidentKeypoints = keypoints.filter(
     ({ score, part }) => score > minConfidence && part in parts

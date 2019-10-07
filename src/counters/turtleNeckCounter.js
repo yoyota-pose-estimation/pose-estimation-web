@@ -19,37 +19,34 @@ export default class extends Counter {
 
   checkPose(keypoints) {
     const {
-      nose,
       leftEar,
       rightEar,
       leftHip,
-      rightHip,
       leftKnee,
-      rightKnee
+      rightHip,
+      rightKnee,
+      rightAnkle,
+      rightShoulder
     } = keypoints
+    if (!rightAnkle) {
+      return
+    }
     if (leftEar && rightEar) {
       return
     }
-    // const ear = leftEar || rightEar
     const ear = rightEar
-    if (!nose || !ear) {
+    const hip = rightHip
+    const knee = rightKnee
+    const shoulder = rightShoulder
+    if (!ear || !hip || !knee || !shoulder) {
       return
     }
 
-    // const direction = nose.x > ear.x
-    const direction = true
-    const hip = direction ? rightHip : leftHip
-    const knee = direction ? rightKnee : leftKnee
-    if (!hip || !knee) {
-      return
-    }
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? this.sensitivity - 2 : this.sensitivity
-    const turtleNeck = direction
-      ? hip.x < ear.x - sensitivity
-      : hip.x > ear.x + sensitivity
-
-    this.uploadImage(turtleNeck.toString())
+    const turtleNeck = sit
+      ? shoulder.x < ear.x + this.sensitivity + -1
+      : hip.x < ear.x + this.sensitivity
+    this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
     this.dequePush(turtleNeck, this.turtleNeckDeque)
     this.count = this.turtleNeckDeque.filter((item) => item).length
 
