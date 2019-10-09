@@ -7,17 +7,8 @@ export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
 
 const {
   user = 'fitness',
-  slackUrl = 'https://dudaji-slack.dudaji.org',
   influxdbUrl = 'https://influxdb.dudaji.org:443'
 } = queryString.parse(window.location.search)
-
-export function sendSlackMessage(text) {
-  axios.post(slackUrl, {
-    text,
-    channel: user,
-    username: 'pose-net-alert'
-  })
-}
 
 export async function uploadImageToMinio(section, label, file) {
   await axios.post(

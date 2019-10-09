@@ -40,13 +40,13 @@ export default class extends Counter {
     const hip = rightHip
     const knee = rightKnee
     const shoulder = rightShoulder
-    if (!ear || !hip || !knee || !shoulder) {
+    if (!ear || !hip || !shoulder) {
       return
     }
 
-    const sit = Math.round(knee.x - hip.x) > 20
+    const sit = knee ? Math.round(knee.x - hip.x) > 20 : true
     const turtleNeck = sit
-      ? shoulder.x < ear.x - this.sensitivity + -1
+      ? shoulder.x < ear.x - this.sensitivity - 2
       : hip.x < ear.x - this.sensitivity
     this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
     this.provideToDeque(turtleNeck)
