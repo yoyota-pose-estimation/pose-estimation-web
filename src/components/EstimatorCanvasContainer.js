@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
-import { loadNet, getInput, drawKeypoints } from './utils'
+import {
+  loadNet,
+  getInput
+  //  drawKeypoints
+} from './utils'
 import getCounter from '../counters'
 import EstimatorCanvas from './EstimatorCanvas'
 
@@ -83,7 +87,7 @@ export default function() {
     return () => {
       clearInterval(intervalId)
     }
-  }, [])
+  })
   return (
     <EstimatorCanvas
       loading={loading}

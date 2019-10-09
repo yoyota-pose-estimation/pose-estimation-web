@@ -1,4 +1,3 @@
-import axios from 'axios'
 import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
