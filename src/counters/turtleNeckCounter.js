@@ -4,25 +4,22 @@ export default class extends Counter {
   constructor(canvas) {
     super(canvas)
     this.name = 'turtleNeck'
-    this.turtleNeckDeque = []
-    this.normalDeque = []
+    this.q = []
     this.maxlen = 200
     this.turtleNeck = false
   }
 
-  dequePush(item, q) {
-    if (q.length === this.maxlen) {
-      q.pop()
+  push(item) {
+    if (this.q.length === this.maxlen) {
+      this.q.pop()
     }
-    q.unshift(item)
+    this.q.unshift(item)
   }
 
   checkPose(keypoints) {
     const {
       leftEar,
       rightEar,
-      leftHip,
-      leftKnee,
       rightHip,
       rightKnee,
       rightAnkle,
@@ -44,25 +41,16 @@ export default class extends Counter {
 
     const sit = Math.round(knee.x - hip.x) > 20
     const turtleNeck = sit
-      ? shoulder.x < ear.x + this.sensitivity + -1
-      : hip.x < ear.x + this.sensitivity
+      ? shoulder.x < ear.x - this.sensitivity + -1
+      : hip.x < ear.x - this.sensitivity
     this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
-    this.dequePush(turtleNeck, this.turtleNeckDeque)
-    this.count = this.turtleNeckDeque.filter((item) => item).length
+    this.push(turtleNeck)
+    this.count = this.q.filter((item) => item).length
+    this.writeMeasurement()
 
     if (this.count > 100) {
       this.alert()
-      this.writeMeasurement()
-      this.turtleNeckDeque = []
-      this.turtleNeck = true
-      return
-    }
-
-    this.dequePush(this.count < 1, this.normalDeque)
-    const normalCount = this.normalDeque.filter((item) => item).length
-    if (normalCount > 100) {
-      this.normalDeque = []
-      this.writeMeasurement(1)
+      this.q = []
     }
   }
 }
