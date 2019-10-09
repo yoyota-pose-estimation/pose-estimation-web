@@ -1,9 +1,9 @@
-import { beep } from './utils'
+// import { beep } from './utils'
 import Counter from './counter'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.name = 'squat'
     this.sit = false
     this.sensitivity = this.sensitivity ? this.sensitivity : 40
@@ -21,7 +21,7 @@ export default class extends Counter {
     if (!this.sit && sit) {
       this.count += 1
       this.sit = true
-      beep.play()
+      // beep.play()
     }
 
     this.sit = sit

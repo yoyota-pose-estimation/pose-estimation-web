@@ -16,6 +16,13 @@ export function sendSlackMessage(text) {
   })
 }
 
+export async function uploadImageToMinio(section, label, file) {
+  await axios.post(
+    `https://multipart-to-minio.dudaji.org/upload/${section}/${label || ''}`,
+    file
+  )
+}
+
 const influx = influxdb ? new Influx.InfluxDB(influxdb) : null
 
 if (influx) {
@@ -33,7 +40,7 @@ if (influx) {
     })
 }
 
-export function save(measurement, count) {
+export function saveToInfluxDb(measurement, count) {
   if (!influx) {
     return
   }

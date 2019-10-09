@@ -1,71 +1,56 @@
-/* eslint-disable class-methods-use-this */
 import Counter from './counter'
-import { save } from './utils'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.name = 'turtleNeck'
-    this.turtleNeckDeque = []
-    this.normalDeque = []
+    this.q = []
     this.maxlen = 200
     this.turtleNeck = false
   }
 
-  dequePush(item, q) {
-    if (q.length === this.maxlen) {
-      q.pop()
+  push(item) {
+    if (this.q.length === this.maxlen) {
+      this.q.pop()
     }
-    q.unshift(item)
+    this.q.unshift(item)
   }
 
   checkPose(keypoints) {
     const {
-      nose,
       leftEar,
       rightEar,
-      leftHip,
       rightHip,
-      leftKnee,
-      rightKnee
+      rightKnee,
+      rightAnkle,
+      rightShoulder
     } = keypoints
+    if (!rightAnkle) {
+      return
+    }
     if (leftEar && rightEar) {
       return
     }
-    // const ear = leftEar || rightEar
     const ear = rightEar
-    if (!nose || !ear) {
+    const hip = rightHip
+    const knee = rightKnee
+    const shoulder = rightShoulder
+    if (!ear || !hip || !knee || !shoulder) {
       return
     }
 
-    // const direction = nose.x > ear.x
-    const direction = true
-    const hip = direction ? rightHip : leftHip
-    const knee = direction ? rightKnee : leftKnee
-    if (!hip || !knee) {
-      return
-    }
     const sit = Math.round(knee.x - hip.x) > 20
-    const sensitivity = sit ? this.sensitivity - 4 : this.sensitivity
-    const turtleNeck = direction
-      ? hip.x < ear.x - sensitivity
-      : hip.x > ear.x + sensitivity
-
-    this.dequePush(turtleNeck, this.turtleNeckDeque)
-    this.count = this.turtleNeckDeque.filter((item) => item).length
+    const turtleNeck = sit
+      ? shoulder.x < ear.x - this.sensitivity + -1
+      : hip.x < ear.x - this.sensitivity
+    this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
+    this.push(turtleNeck)
+    this.count = this.q.filter((item) => item).length
+    this.writeMeasurement()
 
     if (this.count > 100) {
-      this.notify()
-      this.turtleNeckDeque = []
-      this.turtleNeck = true
-      return
-    }
-
-    this.dequePush(this.count < 1, this.normalDeque)
-    const normalCount = this.normalDeque.filter((item) => item).length
-    if (normalCount > 10) {
-      this.normalDeque = []
-      save(this.name, 1)
+      this.alert()
+      this.q = []
     }
   }
 }

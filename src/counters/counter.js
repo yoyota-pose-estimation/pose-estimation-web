@@ -1,10 +1,11 @@
 import queryString from 'query-string'
-import { sendSlackMessage, save } from './utils'
+import { saveToInfluxDb, sendSlackMessage, uploadImageToMinio } from './utils'
 
-const { sensitivity } = queryString.parse(window.location.search)
+const { sensitivity, upload } = queryString.parse(window.location.search)
 
 export default class {
-  constructor() {
+  constructor(canvas) {
+    this.canvas = canvas
     this.name = ''
     this.count = 0
     this.ear = null
@@ -17,8 +18,25 @@ export default class {
     this.sensitivity = parseInt(sensitivity, 10) || 0
   }
 
-  notify() {
+  alert() {
     sendSlackMessage(`${this.name}: ${this.count}`)
-    save(this.name, this.count)
+  }
+
+  writeMeasurement(count = this.count) {
+    saveToInfluxDb(this.name, count)
+  }
+
+  uploadImage(label) {
+    if (!upload) {
+      return
+    }
+    if (!this.canvas) {
+      return
+    }
+    this.canvas.toBlob((file) => {
+      const data = new FormData()
+      data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
+      return uploadImageToMinio(this.name, label, data)
+    }, 'image/jpeg')
   }
 }

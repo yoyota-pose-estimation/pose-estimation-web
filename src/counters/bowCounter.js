@@ -2,29 +2,44 @@ import { beep } from './utils'
 import Counter from './counter'
 
 export default class extends Counter {
-  constructor() {
-    super()
+  constructor(canvas) {
+    super(canvas)
     this.name = 'bow'
-    this.bow = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : 60
+    this.stand = true
+    this.down = false
+    this.sensitivity = this.sensitivity ? this.sensitivity : 10
   }
 
   checkPose(keypoints) {
-    const { leftKnee, leftEar } = keypoints
-    const knee = leftKnee
-    const ear = leftEar
-    if (!ear || !knee) {
+    const { rightEar, rightHip, rightKnee, rightAnkle } = keypoints
+    const ear = rightEar
+    const hip = rightHip
+    const knee = rightKnee
+    const ankle = rightAnkle
+    if (!ear || !hip || !knee || !ankle) {
       return
     }
 
-    const bow = Math.abs(knee.y - ear.y) < this.sensitivity
+    const down = hip.y < ear.y + this.sensitivity
 
-    if (!this.bow && bow) {
-      this.count += 1
-      this.bow = true
-      beep.play()
+    if (down) {
+      if (!this.down) {
+        beep.play()
+      }
+      this.down = true
+      this.uploadImage('true')
+      return
     }
 
-    this.bow = bow
+    const up = Math.round(ankle.y - ear.y) > 145
+    if (up) {
+      this.uploadImage('false')
+    }
+
+    if (this.down && up) {
+      this.count += 1
+      this.down = false
+      beep.play()
+    }
   }
 }
