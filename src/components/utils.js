@@ -49,6 +49,7 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
     // nose: true,
+    rightEye: true,
     rightEar: true,
     rightAnkle: true,
     rightShoulder: true

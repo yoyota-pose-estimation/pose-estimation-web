@@ -7,7 +7,7 @@ export default class extends Counter {
     this.name = 'bow'
     this.stand = true
     this.down = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : -2
+    this.sensitivity = this.sensitivity ? this.sensitivity : 10
   }
 
   checkPose(keypoints) {
