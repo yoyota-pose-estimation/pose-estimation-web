@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function({ loading }) {
   if (loading) {
-    return <p>Loading model...</p>
+    return <h1>Loading model...</h1>
   }
   return <></>
 }

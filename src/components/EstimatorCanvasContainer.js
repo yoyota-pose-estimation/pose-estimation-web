@@ -40,9 +40,6 @@ export default function({ net, loading, imageElement }) {
   }, [imageElement])
 
   useEffect(() => {
-    if (!net) {
-      return () => {}
-    }
     async function estimatePose() {
       const [err, ret] = await to(net.estimateSinglePose(imageElement))
       if (err) {
