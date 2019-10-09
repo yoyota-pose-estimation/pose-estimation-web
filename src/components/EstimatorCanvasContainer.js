@@ -18,7 +18,7 @@ function filterConfidentPart(keypoints, minConfidence) {
 
 function drawCanvas(ctx, img, counters, keypoints) {
   ctx.drawImage(img, 0, 0, img.width, img.height)
-  ctx.font = '15px Verdana'
+  ctx.font = '12px Verdana'
   ctx.fillStyle = 'black'
   counters.forEach(({ name, count }, index) => {
     const text = `${name}: ${count}`
@@ -58,7 +58,7 @@ function setEstimateInterval(net, img, canvasRef, setIntervalId) {
   const counters = getCounter(canvas)
   const intervalId = setInterval(() => {
     estimatePose(ctx, net, img, counters)
-  }, 100)
+  }, 200)
   setIntervalId(intervalId)
 }
 
