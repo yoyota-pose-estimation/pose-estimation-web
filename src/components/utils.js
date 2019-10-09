@@ -49,9 +49,11 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   // eslint-disable-next-line no-undef
   const parts = {
     // nose: true,
-    rightEye: true,
+    // rightEye: true,
     rightEar: true,
-    rightAnkle: true,
+    // rightAnkle: true,
+    rightHip: true,
+    rightKnee: true,
     rightShoulder: true
     // leftEar: true,
     // leftWrist: true,
@@ -68,7 +70,7 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   )
   confidentKeypoints.forEach((keypoint) => {
     const { y, x } = keypoint.position
-    drawPoint(ctx, y * scale, x * scale, 3)
+    drawPoint(ctx, y * scale, x * scale, 2)
   })
 }
 
