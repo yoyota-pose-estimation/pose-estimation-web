@@ -25,60 +25,54 @@ function getCtx(canvas) {
 
 export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
-  function getCanvas() {
-    const canvas = canvasRef.current
-    const { width, height } = imageElement
-    canvas.width = width
-    canvas.height = height
-    return canvas
-  }
 
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
   const [pose, setPose] = useState({ keypoints: [] })
   const [counters, setCounters] = useState([])
 
   useLayoutEffect(() => {
-    const canvas = getCanvas(canvasRef, imageElement)
+    const canvas = canvasRef.current
+    const { width, height } = imageElement
+    canvas.width = width
+    canvas.height = height
     setCounters(getCounter(canvas))
     setCtx(getCtx(canvas))
   }, [imageElement])
-
-  async function estimatePose() {
-    const [err, ret] = await to(net.estimateSinglePose(imageElement))
-    if (err) {
-      window.location.reload()
-      return
-    }
-    setPose(ret)
-  }
 
   useEffect(() => {
     if (!net) {
       return () => {}
     }
+    async function estimatePose() {
+      const [err, ret] = await to(net.estimateSinglePose(imageElement))
+      if (err) {
+        window.location.reload()
+        return
+      }
+      setPose(ret)
+    }
     const intervalId = setInterval(() => {
-      estimatePose(net, imageElement)
+      estimatePose()
     }, 200)
     return () => {
       clearInterval(intervalId)
     }
-  }, [net])
-
-  async function checkPose() {
-    if (!pose) {
-      return
-    }
-    const { keypoints } = pose
-    const confidentKeypoints = filterConfidentPart(keypoints, 0.5)
-    counters.forEach((counter) => counter.checkPose(confidentKeypoints))
-  }
+  }, [net, imageElement])
 
   useLayoutEffect(() => {
-    const { width, height } = imageElement
-    ctx.drawImage(imageElement, 0, 0, width, height)
+    function drawImage() {
+      const { width, height } = imageElement
+      ctx.drawImage(imageElement, 0, 0, width, height)
+    }
+    async function checkPose() {
+      const { keypoints } = pose
+      const confidentKeypoints = filterConfidentPart(keypoints, 0.5)
+      counters.forEach((counter) => counter.checkPose(confidentKeypoints))
+    }
+    drawImage()
     checkPose()
     drawKeypoints(pose.keypoints, 0.1, ctx)
-  }, [pose])
+  }, [ctx, pose, counters, imageElement])
 
   return <EstimatorCanvas loading={loading} canvasRef={canvasRef} />
 }
