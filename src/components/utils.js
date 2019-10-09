@@ -17,7 +17,7 @@ export function isMobile() {
   return isAndroid() || isiOS()
 }
 
-export function loadNet() {
+export function getNet() {
   if (isMobile()) {
     return posenet.load()
   }
