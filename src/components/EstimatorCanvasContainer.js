@@ -19,10 +19,10 @@ function filterConfidentPart(keypoints, minConfidence) {
 function drawCanvas(ctx, img, counters, keypoints) {
   ctx.drawImage(img, 0, 0, img.width, img.height)
   ctx.font = '12px Verdana'
-  ctx.fillStyle = 'black'
+  ctx.fillStyle = 'red'
   counters.forEach(({ name, count }, index) => {
     const text = `${name}: ${count}`
-    ctx.fillText(text, 50, 10 * (index + 1))
+    ctx.fillText(text, 80, 10 * (index + 1))
   })
   // drawKeypoints(keypoints, 0.1, ctx)
 }

@@ -5,14 +5,17 @@ const Influx = require('influx')
 
 export const beep = new Audio('https://www.soundjay.com/button/beep-07.mp3')
 
-const { slackUrl, influxdb } = queryString.parse(window.location.search)
+const {
+  user = 'fitness',
+  slackUrl = 'https://dudaji-slack.dudaji.org',
+  influxdbUrl = 'https://influxdb.dudaji.org:443'
+} = queryString.parse(window.location.search)
+
 export function sendSlackMessage(text) {
-  if (!slackUrl) {
-    return
-  }
   axios.post(slackUrl, {
     text,
-    username: 'poseNet'
+    channel: user,
+    username: 'pose-net-alert'
   })
 }
 
@@ -23,14 +26,16 @@ export async function uploadImageToMinio(section, label, file) {
   )
 }
 
-const influx = influxdb ? new Influx.InfluxDB(influxdb) : null
+const influx = influxdbUrl
+  ? new Influx.InfluxDB(`${influxdbUrl}/${user}`)
+  : null
 
 if (influx) {
   influx
     .getDatabaseNames()
     .then((names) => {
-      if (!names.includes('counts')) {
-        influx.createDatabase('counts')
+      if (!names.includes(user)) {
+        influx.createDatabase(user)
       }
       return names
     })

@@ -1,7 +1,9 @@
 import queryString from 'query-string'
 import { saveToInfluxDb, sendSlackMessage, uploadImageToMinio } from './utils'
 
-const { sensitivity, upload } = queryString.parse(window.location.search)
+const { sensitivity, upload, user = 'unknown' } = queryString.parse(
+  window.location.search
+)
 
 export default class {
   constructor(canvas) {
@@ -35,7 +37,11 @@ export default class {
     }
     this.canvas.toBlob((file) => {
       const data = new FormData()
-      data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
+      data.append(
+        'image',
+        file,
+        `${new Date().toISOString()}-browser-${user}.jpg`
+      )
       return uploadImageToMinio(this.name, label, data)
     }, 'image/jpeg')
   }
