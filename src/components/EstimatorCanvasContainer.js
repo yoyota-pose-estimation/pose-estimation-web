@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
 import to from 'await-to-js'
-import { loadNet, getInput, drawKeypoints } from './utils'
+import {
+  loadNet,
+  getInput
+  //  drawKeypoints
+} from './utils'
 import getCounter from '../counters'
 import EstimatorCanvas from './EstimatorCanvas'
 
@@ -16,14 +20,8 @@ function filterConfidentPart(keypoints, minConfidence) {
   }, {})
 }
 
-function drawCanvas(ctx, img, counters, keypoints) {
+function drawCanvas(ctx, img, keypoints) {
   ctx.drawImage(img, 0, 0, img.width, img.height)
-  ctx.font = '12px Verdana'
-  ctx.fillStyle = 'red'
-  counters.forEach(({ name, count }, index) => {
-    const text = `${name}: ${count}`
-    ctx.fillText(text, 80, 10 * (index + 1))
-  })
   // drawKeypoints(keypoints, 0.1, ctx)
 }
 
@@ -34,7 +32,7 @@ async function estimatePose(ctx, net, img, counters) {
     return
   }
   const { keypoints } = pose
-  drawCanvas(ctx, img, counters, keypoints)
+  drawCanvas(ctx, img, keypoints)
   const confidentKeypoints = filterConfidentPart(keypoints, 0.5)
   counters.forEach((counter) => counter.checkPose(confidentKeypoints))
 }
@@ -89,7 +87,7 @@ export default function() {
     return () => {
       clearInterval(intervalId)
     }
-  }, [])
+  })
   return (
     <EstimatorCanvas
       loading={loading}

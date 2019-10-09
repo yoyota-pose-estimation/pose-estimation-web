@@ -1,18 +1,9 @@
-import axios from 'axios'
 import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
 
 const width = 300
 const height = 250
-
-export function sendSlackMessage(text) {
-  const { slackUrl } = queryString.parse(window.location.search)
-  axios.post(slackUrl, {
-    text,
-    username: 'poseNet'
-  })
-}
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent)

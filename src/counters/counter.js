@@ -1,5 +1,5 @@
 import queryString from 'query-string'
-import { saveToInfluxDb, sendSlackMessage, uploadImageToMinio } from './utils'
+import { saveToInfluxDb, uploadImageToMinio } from './utils'
 
 const { sensitivity, upload, user = 'unknown' } = queryString.parse(
   window.location.search
@@ -18,10 +18,6 @@ export default class {
     this.wrist = null
     this.shoulder = null
     this.sensitivity = parseInt(sensitivity, 10) || 0
-  }
-
-  alert() {
-    sendSlackMessage(`${this.name}: ${this.count}`)
   }
 
   writeMeasurement(count = this.count) {
