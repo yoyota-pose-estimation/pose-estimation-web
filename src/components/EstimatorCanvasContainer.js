@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import to from 'await-to-js'
 import getCounter from '../counters'
-
 import { drawKeypoints } from './utils'
 import EstimatorCanvas from './EstimatorCanvas'
 
@@ -61,6 +60,14 @@ export default function({ net, loading, imageElement }) {
       const { width, height } = imageElement
       ctx.drawImage(imageElement, 0, 0, width, height)
     }
+    function drawStatusText() {
+      ctx.font = '12px Verdana'
+      ctx.fillStyle = 'red'
+      counters.forEach(({ name, count }, index) => {
+        const text = `${name}: ${count}`
+        ctx.fillText(text, 80, 10 * (index + 1))
+      })
+    }
     async function checkPose() {
       const { keypoints } = pose
       const confidentKeypoints = filterConfidentPart(keypoints, 0.5)
@@ -68,6 +75,7 @@ export default function({ net, loading, imageElement }) {
     }
     drawImage()
     checkPose()
+    drawStatusText()
     drawKeypoints(pose.keypoints, 0.1, ctx)
   }, [ctx, pose, counters, imageElement])
 
