@@ -61,22 +61,22 @@ export default function({ net, loading, imageElement }) {
       ctx.drawImage(imageElement, 0, 0, width, height)
     }
     function drawStatusText() {
-      ctx.font = '12px Verdana'
-      ctx.fillStyle = 'red'
+      ctx.font = '20px Verdana'
+      ctx.fillStyle = 'aqua'
       counters.forEach(({ name, count }, index) => {
         const text = `${name}: ${count}`
-        ctx.fillText(text, 80, 10 * (index + 1))
+        ctx.fillText(text, 100, 30 * (index + 1))
       })
     }
     async function checkPose() {
       const { keypoints } = pose
-      const confidentKeypoints = filterConfidentPart(keypoints, 0.5)
+      const confidentKeypoints = filterConfidentPart(keypoints, 0.7)
       counters.forEach((counter) => counter.checkPose(confidentKeypoints))
     }
     drawImage()
     checkPose()
     drawStatusText()
-    drawKeypoints(pose.keypoints, 0.1, ctx)
+    drawKeypoints(pose.keypoints, 0.7, ctx)
   }, [ctx, pose, counters, imageElement])
 
   return <EstimatorCanvas loading={loading} canvasRef={canvasRef} />
