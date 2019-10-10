@@ -37,27 +37,8 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 }
 
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
-  // eslint-disable-next-line no-undef
-  const parts = {
-    // nose: true,
-    // rightEye: true,
-    rightEar: true,
-    // rightAnkle: true,
-    rightHip: true,
-    rightKnee: true,
-    rightShoulder: true
-    // leftEar: true,
-    // leftWrist: true,
-    // leftKnee: true
-    // leftHip: true,
-    // rightHip: true,
-    // rightKnee: true,
-    // rightEye: true,
-    // rightElbow: true
-    // rightWrist: true
-  }
   const confidentKeypoints = keypoints.filter(
-    ({ score, part }) => score > minConfidence && part in parts
+    ({ score }) => score > minConfidence
   )
   confidentKeypoints.forEach((keypoint) => {
     const { y, x } = keypoint.position
