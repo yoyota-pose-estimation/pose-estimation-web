@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import to from 'await-to-js'
 import getCounter from '../counters'
-import { drawKeypoints } from './utils'
+import { drawKeypoints, uploadMultiPersonImage } from './utils'
 import EstimatorCanvas from './EstimatorCanvas'
 
 function filterConfidentPart(keypoints, minConfidence) {
@@ -26,7 +26,7 @@ export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
 
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
-  const [pose, setPose] = useState({ keypoints: [] })
+  const [poses, setPoses] = useState([{ keypoints: [] }])
   const [counters, setCounters] = useState([])
 
   useLayoutEffect(() => {
@@ -40,12 +40,12 @@ export default function({ net, loading, imageElement }) {
 
   useEffect(() => {
     async function estimatePose() {
-      const [err, ret] = await to(net.estimateSinglePose(imageElement))
+      const [err, ret] = await to(net.estimateMultiplePoses(imageElement))
       if (err) {
         window.location.reload()
         return
       }
-      setPose(ret)
+      setPoses(ret)
     }
     const intervalId = setInterval(() => {
       estimatePose()
@@ -68,16 +68,22 @@ export default function({ net, loading, imageElement }) {
         ctx.fillText(text, 100, 30 * (index + 1))
       })
     }
-    async function checkPose() {
+    async function checkPose(pose) {
       const { keypoints } = pose
       const confidentKeypoints = filterConfidentPart(keypoints, 0.7)
       counters.forEach((counter) => counter.checkPose(confidentKeypoints))
     }
     drawImage()
-    checkPose()
+    if (poses.length > 1) {
+      uploadMultiPersonImage(canvasRef.current)
+      return
+    }
+    poses.forEach(checkPose)
     drawStatusText()
-    drawKeypoints(pose.keypoints, 0.7, ctx)
-  }, [ctx, pose, counters, imageElement])
+    poses.forEach(({ keypoints }) => {
+      drawKeypoints(keypoints, 0.7, ctx)
+    })
+  }, [ctx, poses, counters, imageElement])
 
   return <EstimatorCanvas loading={loading} canvasRef={canvasRef} />
 }
