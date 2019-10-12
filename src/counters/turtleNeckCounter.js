@@ -1,5 +1,28 @@
 import Counter from './counter'
 
+function getTurtleNeckKeypoints({ keypoints, direction }) {
+  return {
+    ear: keypoints[`${direction}Ear`],
+    hip: keypoints[`${direction}Hip`],
+    knee: keypoints[`${direction}Knee`],
+    shoulder: keypoints[`${direction}Shoulder`]
+  }
+}
+
+function isSitting({ hip, knee }) {
+  return Math.round(knee.x - hip.x) > 20
+}
+
+function isTurtleNeck({ ear, hip, shoulder, sitting, direction, sensitivity }) {
+  const newSensitivity = sitting ? sensitivity - 2 : sensitivity
+  const comparisonTarget = sitting ? shoulder : hip
+
+  if (direction === 'left') {
+    return comparisonTarget.x - newSensitivity > ear.x
+  }
+  return comparisonTarget.x < ear.x - newSensitivity
+}
+
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
@@ -33,23 +56,27 @@ export default class extends Counter {
   }
 
   checkPose(keypoints) {
-    const { leftEar, rightEar, rightHip, rightKnee, rightShoulder } = keypoints
+    const { leftEar, rightEar } = keypoints
     if (leftEar && rightEar) {
       return
     }
-    const ear = rightEar
-    const hip = rightHip
-    const knee = rightKnee
-    const shoulder = rightShoulder
-    if (!ear || !hip || !shoulder) {
+    const direction = leftEar ? 'left' : 'right'
+    const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
+
+    const test = Object.values(turtleNeckKeypoints).every((point) => {
+      return point
+    })
+    if (!test) {
       return
     }
-
-    const sit = knee ? Math.round(knee.x - hip.x) > 20 : true
-    const turtleNeck = sit
-      ? shoulder.x < ear.x - this.sensitivity - 2
-      : hip.x < ear.x - this.sensitivity
-    this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
+    const sitting = isSitting(turtleNeckKeypoints)
+    const turtleNeck = isTurtleNeck({
+      ...turtleNeckKeypoints,
+      sitting,
+      direction,
+      sensitivity: this.sensitivity
+    })
+    this.uploadImage(`${sitting ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
     this.provideToDeque(turtleNeck)
     this.count = this.deque.filter((item) => item).length
     this.writeMeasurement()

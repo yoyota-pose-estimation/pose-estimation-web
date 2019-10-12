@@ -70,18 +70,21 @@ export default function({ net, loading, imageElement }) {
     }
     async function checkPose(pose) {
       const { keypoints } = pose
-      const confidentKeypoints = filterConfidentPart(keypoints, 0.7)
+      const confidentKeypoints = filterConfidentPart(keypoints, 0.3)
       counters.forEach((counter) => counter.checkPose(confidentKeypoints))
     }
     drawImage()
     if (poses.length > 1) {
       uploadMultiPersonImage(canvasRef.current)
+      poses.forEach(({ keypoints }) => {
+        drawKeypoints(keypoints, 0.3, ctx)
+      })
       return
     }
     poses.forEach(checkPose)
     drawStatusText()
     poses.forEach(({ keypoints }) => {
-      drawKeypoints(keypoints, 0.7, ctx)
+      drawKeypoints(keypoints, 0.3, ctx)
     })
   }, [ctx, poses, counters, imageElement])
 
