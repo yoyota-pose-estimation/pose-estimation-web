@@ -14,7 +14,10 @@ function isSitting({ hip, knee }) {
 }
 
 function isTurtleNeck({ ear, hip, shoulder, sitting, direction, sensitivity }) {
-  const newSensitivity = sitting ? sensitivity - 2 : sensitivity
+  const sittingSensitivity = direction === 'right' ? -5 : 0
+  const newSensitivity = sitting
+    ? sensitivity - sittingSensitivity
+    : sensitivity
   const comparisonTarget = sitting ? shoulder : hip
 
   if (direction === 'left') {
@@ -30,7 +33,7 @@ export default class extends Counter {
     this.maxlen = 100
     this.deque = new Array(this.maxlen).fill(false)
     this.turtleNeck = false
-    this.sensitivity = -2
+    this.sensitivity = this.sensitivity ? this.sensitivity : -1
   }
 
   append(item) {
@@ -63,10 +66,7 @@ export default class extends Counter {
     const direction = leftEar ? 'left' : 'right'
     const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
 
-    const test = Object.values(turtleNeckKeypoints).every((point) => {
-      return point
-    })
-    if (!test) {
+    if (!Object.values(turtleNeckKeypoints).every((point) => point)) {
       return
     }
     const sitting = isSitting(turtleNeckKeypoints)
