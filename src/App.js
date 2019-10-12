@@ -10,6 +10,13 @@ function App() {
           resolve({ keypoints: [] })
         })
       })
+    },
+    estimateMultiplePoses() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([{ keypoints: [] }])
+        })
+      })
     }
   })
   const [imageElement, setImageElement] = useState(new Image(50, 50))

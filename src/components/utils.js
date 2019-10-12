@@ -1,6 +1,7 @@
 import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
+import { uploadImageToMinio } from '../counters/utils'
 
 const width = 300
 const height = 250
@@ -89,4 +90,12 @@ export async function getInput() {
   }
   video.play()
   return video
+}
+
+export function uploadMultiPersonImage(canvas) {
+  canvas.toBlob((file) => {
+    const data = new FormData()
+    data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
+    return uploadImageToMinio('multiPerson', 'true', data)
+  }, 'image/jpeg')
 }

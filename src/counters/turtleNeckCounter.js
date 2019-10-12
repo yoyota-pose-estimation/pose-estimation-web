@@ -7,6 +7,7 @@ export default class extends Counter {
     this.maxlen = 100
     this.deque = new Array(this.maxlen).fill(false)
     this.turtleNeck = false
+    this.sensitivity = -2
   }
 
   append(item) {
@@ -46,7 +47,7 @@ export default class extends Counter {
 
     const sit = knee ? Math.round(knee.x - hip.x) > 20 : true
     const turtleNeck = sit
-      ? shoulder.x < ear.x - this.sensitivity - 3
+      ? shoulder.x < ear.x - this.sensitivity - 2
       : hip.x < ear.x - this.sensitivity
     this.uploadImage(`${sit ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
     this.provideToDeque(turtleNeck)
