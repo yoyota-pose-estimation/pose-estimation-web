@@ -14,9 +14,11 @@ function isSitting({ hip, knee }) {
 }
 
 function isTurtleNeck({ ear, hip, shoulder, sitting, direction, sensitivity }) {
-  const sittingSensitivity = direction === 'right' ? -5 : 0
+  // const sittingSensitivity = direction === 'right' ? -1 : 0
+
+  const sittingSensitivity = 7
   const newSensitivity = sitting
-    ? sensitivity - sittingSensitivity
+    ? sensitivity + sittingSensitivity
     : sensitivity
   const comparisonTarget = sitting ? shoulder : hip
 
@@ -33,7 +35,7 @@ export default class extends Counter {
     this.maxlen = 100
     this.deque = new Array(this.maxlen).fill(false)
     this.turtleNeck = false
-    this.sensitivity = this.sensitivity ? this.sensitivity : -1
+    this.sensitivity = this.sensitivity ? this.sensitivity : -8
   }
 
   append(item) {

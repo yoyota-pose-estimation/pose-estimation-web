@@ -1,7 +1,7 @@
 import queryString from 'query-string'
 import { saveToInfluxDb, uploadImageToMinio } from './utils'
 
-const { sensitivity, upload = true, user = 'unknown' } = queryString.parse(
+const { sensitivity, upload = true, user = 'fitness' } = queryString.parse(
   window.location.search
 )
 

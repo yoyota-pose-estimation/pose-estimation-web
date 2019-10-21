@@ -25,6 +25,7 @@ function getCtx(canvas) {
 export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
 
+  const [intervalDealy, setIntervalDelay] = useState(100)
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
   const [poses, setPoses] = useState([{ keypoints: [] }])
   const [counters, setCounters] = useState([])
@@ -49,11 +50,11 @@ export default function({ net, loading, imageElement }) {
     }
     const intervalId = setInterval(() => {
       estimatePose()
-    }, 200)
+    }, intervalDealy)
     return () => {
       clearInterval(intervalId)
     }
-  }, [net, imageElement])
+  }, [net, imageElement, intervalDealy])
 
   useLayoutEffect(() => {
     function drawImage() {
@@ -68,25 +69,33 @@ export default function({ net, loading, imageElement }) {
         ctx.fillText(text, 100, 30 * (index + 1))
       })
     }
+    const threshold = 0.2
     async function checkPose(pose) {
       const { keypoints } = pose
-      const confidentKeypoints = filterConfidentPart(keypoints, 0.1)
+      const confidentKeypoints = filterConfidentPart(keypoints, threshold)
       counters.forEach((counter) => counter.checkPose(confidentKeypoints))
     }
     drawImage()
     if (poses.length > 1) {
       uploadMultiPersonImage(canvasRef.current)
       poses.forEach(({ keypoints }) => {
-        drawKeypoints(keypoints, 0.1, ctx)
+        drawKeypoints(keypoints, threshold, ctx)
       })
       return
     }
     poses.forEach(checkPose)
     drawStatusText()
     poses.forEach(({ keypoints }) => {
-      drawKeypoints(keypoints, 0.3, ctx)
+      drawKeypoints(keypoints, threshold, ctx)
     })
   }, [ctx, poses, counters, imageElement])
 
-  return <EstimatorCanvas loading={loading} canvasRef={canvasRef} />
+  return (
+    <EstimatorCanvas
+      loading={loading}
+      canvasRef={canvasRef}
+      intervalDealy={intervalDealy}
+      setIntervalDelay={setIntervalDelay}
+    />
+  )
 }

@@ -38,6 +38,7 @@ export default class extends Counter {
 
     if (this.upPosition()) {
       this.up = Math.max(this.up, this.elbow.y)
+      this.uploadImage('true')
       return
     }
 
@@ -54,6 +55,9 @@ export default class extends Counter {
     }
     if (this.done() && this.count > 0) {
       this.count = 0
+      this.writeMeasurement()
+      return
     }
+    this.uploadImage('false')
   }
 }

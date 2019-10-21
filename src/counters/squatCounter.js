@@ -1,4 +1,4 @@
-// import { beep } from './utils'
+import { beep } from './utils'
 import Counter from './counter'
 
 export default class extends Counter {
@@ -18,10 +18,15 @@ export default class extends Counter {
     }
     const sit = Math.abs(knee.x - hip.x) > this.sensitivity
 
+    if (!sit) {
+      this.uploadImage('false')
+    }
+
     if (!this.sit && sit) {
+      this.uploadImage('true')
       this.count += 1
       this.sit = true
-      // beep.play()
+      beep.play()
     }
 
     this.sit = sit
