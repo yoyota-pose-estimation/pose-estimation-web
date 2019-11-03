@@ -36,7 +36,7 @@ export default class {
       data.append(
         'image',
         file,
-        `${new Date().toISOString()}-browser-${user}.jpg`
+        `${new Date().toISOString()}-browser-${user}-${label}.jpg`
       )
       return uploadImageToMinio(this.name, label, data)
     }, 'image/jpeg')

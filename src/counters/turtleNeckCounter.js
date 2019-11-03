@@ -16,7 +16,7 @@ function isSitting({ hip, knee }) {
 function isTurtleNeck({ ear, hip, shoulder, sitting, direction, sensitivity }) {
   // const sittingSensitivity = direction === 'right' ? -1 : 0
 
-  const sittingSensitivity = 7
+  const sittingSensitivity = 9
   const newSensitivity = sitting
     ? sensitivity + sittingSensitivity
     : sensitivity
