@@ -20,11 +20,11 @@ export default class {
     this.sensitivity = parseInt(sensitivity, 10) || 0
   }
 
-  writeMeasurement(count = this.count) {
-    saveToInfluxDb(this.name, count)
+  writeMeasurement(measurement = this.name, fields = { count: this.count }) {
+    saveToInfluxDb(measurement, fields)
   }
 
-  uploadImage(label) {
+  uploadImage({ label, distance }) {
     if (!upload) {
       return
     }
@@ -36,7 +36,7 @@ export default class {
       data.append(
         'image',
         file,
-        `${new Date().toISOString()}-browser-${user}-${label}.jpg`
+        `${new Date().toISOString()}_browser_${user}_${distance}_${label}.jpg`
       )
       return uploadImageToMinio(this.name, label, data)
     }, 'image/jpeg')

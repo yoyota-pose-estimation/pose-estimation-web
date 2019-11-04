@@ -1,4 +1,5 @@
 import Counter from './counter'
+import { Deque } from './utils'
 
 function getTurtleNeckKeypoints({ keypoints, direction }) {
   return {
@@ -9,55 +10,19 @@ function getTurtleNeckKeypoints({ keypoints, direction }) {
   }
 }
 
-function isSitting({ hip, knee }) {
-  return Math.round(knee.x - hip.x) > 20
-}
-
-function isTurtleNeck({ ear, hip, shoulder, sitting, direction, sensitivity }) {
-  // const sittingSensitivity = direction === 'right' ? -1 : 0
-
-  const sittingSensitivity = 9
-  const newSensitivity = sitting
-    ? sensitivity + sittingSensitivity
-    : sensitivity
-  const comparisonTarget = sitting ? shoulder : hip
-
+function getDistance({ ear, direction, comparisonTarget }) {
   if (direction === 'left') {
-    return comparisonTarget.x - newSensitivity > ear.x
+    return ear.x - comparisonTarget.x
   }
-  return comparisonTarget.x < ear.x - newSensitivity
+  return comparisonTarget.x - ear.x
 }
 
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
     this.name = 'turtleNeck'
-    this.maxlen = 100
-    this.deque = new Array(this.maxlen).fill(false)
-    this.turtleNeck = false
+    this.deque = new Deque(100)
     this.sensitivity = this.sensitivity ? this.sensitivity : -8
-  }
-
-  append(item) {
-    if (this.deque.length === this.maxlen) {
-      this.deque.shift()
-    }
-    this.deque.push(item)
-  }
-
-  prepend(item) {
-    if (this.deque.length === this.maxlen) {
-      this.deque.pop()
-    }
-    this.deque.unshift(item)
-  }
-
-  provideToDeque(item) {
-    if (item) {
-      this.append(item)
-    } else {
-      this.prepend(item)
-    }
   }
 
   checkPose(keypoints) {
@@ -67,20 +32,20 @@ export default class extends Counter {
     }
     const direction = leftEar ? 'left' : 'right'
     const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
-
     if (!Object.values(turtleNeckKeypoints).every((point) => point)) {
       return
     }
-    const sitting = isSitting(turtleNeckKeypoints)
-    const turtleNeck = isTurtleNeck({
-      ...turtleNeckKeypoints,
-      sitting,
-      direction,
-      sensitivity: this.sensitivity
-    })
-    this.uploadImage(`${sitting ? 'sit' : 'stand'}-${turtleNeck.toString()}`)
-    this.provideToDeque(turtleNeck)
-    this.count = this.deque.filter((item) => item).length
-    this.writeMeasurement()
+    const { ear, hip, knee, shoulder } = turtleNeckKeypoints
+    const sitting = Math.round(knee.x - hip.x) > 20
+    const comparisonTarget = sitting ? shoulder : hip
+    const sensitivity = sitting ? this.sensitivity + 9 : this.sensitivity
+    const distance = getDistance({ ear, direction, comparisonTarget })
+    const turtleNeck = distance + sensitivity < 0
+    const label = `${sitting ? 'sit' : 'stand'}_${turtleNeck.toString()}`
+    this.uploadImage({ label, distance })
+    this.deque.insert(turtleNeck)
+    this.count = this.deque.trueCount()
+    // this.writeMeasurement()
+    // this.writeMeasurement('turtleNeckDistance', { distance })
   }
 }

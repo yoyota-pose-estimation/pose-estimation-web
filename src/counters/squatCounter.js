@@ -18,12 +18,10 @@ export default class extends Counter {
     }
     const sit = Math.abs(knee.x - hip.x) > this.sensitivity
 
-    if (!sit) {
-      this.uploadImage('false')
-    }
+    // if (!sit) {
+    // }
 
     if (!this.sit && sit) {
-      this.uploadImage('true')
       this.count += 1
       this.sit = true
       beep.play()

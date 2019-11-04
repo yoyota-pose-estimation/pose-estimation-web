@@ -33,7 +33,6 @@ export default class extends Counter {
     const down = hip.y < ear.y + this.sensitivity
     if (down) {
       this.down = true
-      this.uploadImage('true')
       return
     }
 
@@ -42,9 +41,8 @@ export default class extends Counter {
     }
 
     const up = Math.round(knee.y - ear.y) > 110
-    if (up) {
-      this.uploadImage('false')
-    }
+    // if (up) {
+    // }
 
     if (this.down && up) {
       this.count += 1
