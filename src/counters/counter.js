@@ -6,8 +6,9 @@ const { sensitivity, upload = true, user = 'fitness' } = queryString.parse(
 )
 
 export default class {
-  constructor(canvas) {
+  constructor({ canvas, setDistance }) {
     this.canvas = canvas
+    this.setDistance = setDistance
     this.name = ''
     this.count = 0
     this.ear = null

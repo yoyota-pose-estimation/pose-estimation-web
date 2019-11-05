@@ -25,6 +25,7 @@ function getCtx(canvas) {
 export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
 
+  const [distance, setDistance] = useState(0)
   const [intervalDealy, setIntervalDelay] = useState(250)
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
   const [poses, setPoses] = useState([{ keypoints: [] }])
@@ -35,7 +36,7 @@ export default function({ net, loading, imageElement }) {
     const { width, height } = imageElement
     canvas.width = width
     canvas.height = height
-    setCounters(getCounter(canvas))
+    setCounters(getCounter({ canvas, setDistance }))
     setCtx(getCtx(canvas))
   }, [imageElement])
 
@@ -64,9 +65,10 @@ export default function({ net, loading, imageElement }) {
     function drawStatusText() {
       ctx.font = '20px Verdana'
       ctx.fillStyle = 'aqua'
+      ctx.fillText(`distance: ${distance}`, 100, 30)
       counters.forEach(({ name, count }, index) => {
         const text = `${name}: ${count}`
-        ctx.fillText(text, 100, 30 * (index + 1))
+        ctx.fillText(text, 100, 30 * (index + 2))
       })
     }
     const threshold = 0.2
@@ -88,7 +90,7 @@ export default function({ net, loading, imageElement }) {
     poses.forEach(({ keypoints }) => {
       drawKeypoints(keypoints, threshold, ctx)
     })
-  }, [ctx, poses, counters, imageElement])
+  }, [ctx, poses, counters, distance, imageElement])
 
   return (
     <EstimatorCanvas

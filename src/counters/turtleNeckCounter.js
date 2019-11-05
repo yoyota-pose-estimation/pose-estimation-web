@@ -1,5 +1,5 @@
 import Counter from './counter'
-import { Deque } from './utils'
+// import { Deque } from './utils'
 
 function getTurtleNeckKeypoints({ keypoints, direction }) {
   return {
@@ -27,8 +27,8 @@ export default class extends Counter {
   constructor(canvas) {
     super(canvas)
     this.name = 'turtleNeck'
-    this.deque = new Deque(100)
     this.sensitivity = this.sensitivity ? this.sensitivity : -8
+    // this.deque = new Deque(100)
   }
 
   checkPose(keypoints) {
@@ -42,10 +42,11 @@ export default class extends Counter {
     }
     const { ear, hip } = turtleNeckKeypoints
     const distance = getDistance({ ear, direction, hip })
+    this.setDistance(distance)
     const turtleNeck = distance + this.sensitivity < 0
     this.uploadImage({ label: turtleNeck.toString(), distance })
-    this.deque.insert(turtleNeck)
-    this.count = this.deque.trueCount()
+    // this.deque.insert(turtleNeck)
+    // this.count = this.deque.trueCount()
     // this.writeMeasurement()
     // this.writeMeasurement('turtleNeckDistance', { distance })
   }
