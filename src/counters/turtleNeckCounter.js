@@ -4,17 +4,23 @@ import { Deque } from './utils'
 function getTurtleNeckKeypoints({ keypoints, direction }) {
   return {
     ear: keypoints[`${direction}Ear`],
-    hip: keypoints[`${direction}Hip`],
-    knee: keypoints[`${direction}Knee`],
-    shoulder: keypoints[`${direction}Shoulder`]
+    hip: keypoints[`${direction}Hip`]
   }
 }
 
-function getDistance({ ear, direction, comparisonTarget }) {
+function getDistance({ ear, direction, hip }) {
   if (direction === 'left') {
-    return ear.x - comparisonTarget.x
+    return ear.x - hip.x
   }
-  return comparisonTarget.x - ear.x
+  return hip.x - ear.x
+}
+
+function getDirection(keypoints) {
+  const { leftEar, rightEar } = keypoints
+  if (leftEar && rightEar) {
+    return 'front'
+  }
+  return leftEar ? 'left' : 'right'
 }
 
 export default class extends Counter {
@@ -26,23 +32,18 @@ export default class extends Counter {
   }
 
   checkPose(keypoints) {
-    const { leftEar, rightEar } = keypoints
-    if (leftEar && rightEar) {
+    const direction = getDirection(keypoints)
+    if (direction === 'front') {
       return
     }
-    const direction = leftEar ? 'left' : 'right'
     const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
     if (!Object.values(turtleNeckKeypoints).every((point) => point)) {
       return
     }
-    const { ear, hip, knee, shoulder } = turtleNeckKeypoints
-    const sitting = Math.round(knee.x - hip.x) > 20
-    const comparisonTarget = sitting ? shoulder : hip
-    const sensitivity = sitting ? this.sensitivity + 9 : this.sensitivity
-    const distance = getDistance({ ear, direction, comparisonTarget })
-    const turtleNeck = distance + sensitivity < 0
-    const label = `${sitting ? 'sit' : 'stand'}_${turtleNeck.toString()}`
-    this.uploadImage({ label, distance })
+    const { ear, hip } = turtleNeckKeypoints
+    const distance = getDistance({ ear, direction, hip })
+    const turtleNeck = distance + this.sensitivity < 0
+    this.uploadImage({ label: turtleNeck.toString(), distance })
     this.deque.insert(turtleNeck)
     this.count = this.deque.trueCount()
     // this.writeMeasurement()

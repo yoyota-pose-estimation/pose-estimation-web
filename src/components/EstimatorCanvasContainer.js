@@ -25,7 +25,7 @@ function getCtx(canvas) {
 export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
 
-  const [intervalDealy, setIntervalDelay] = useState(100)
+  const [intervalDealy, setIntervalDelay] = useState(250)
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
   const [poses, setPoses] = useState([{ keypoints: [] }])
   const [counters, setCounters] = useState([])

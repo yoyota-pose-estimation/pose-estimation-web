@@ -6,7 +6,7 @@ profiles:
       - command: dev
     build:
       artifacts:
-        - image: registry.dudaji.org/huhuta/pose-estimation-web
+        - image: registry.dudaji.org/yoyota/pose-estimation-web
           sync:
             manual:
               - src: "src/**/*.js"
@@ -30,7 +30,7 @@ profiles:
       - command: run
     build:
       artifacts:
-        - image: registry.dudaji.org/huhuta/pose-estimation-web
+        - image: registry.dudaji.org/yoyota/pose-estimation-web
     deploy:
       helm:
         releases:
