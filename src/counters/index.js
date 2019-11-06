@@ -4,7 +4,7 @@ import turtleNeckCounter from './turtleNeckCounter'
 import squatCounter from './squatCounter'
 import bowCounter from './bowCounter'
 
-function getCounter(ctx) {
+function getCounter({ canvas, setDistance }) {
   const parsed = queryString.parse(window.location.search)
   const allCounter = {
     pullUpCounter,
@@ -14,11 +14,11 @@ function getCounter(ctx) {
   }
 
   if (!parsed.counter) {
-    return Object.values(allCounter).map((V) => new V(ctx))
+    return Object.values(allCounter).map((V) => new V({ canvas, setDistance }))
   }
 
   return parsed.counter.split(',').map((counter) => {
-    return new allCounter[`${counter}Counter`](ctx)
+    return new allCounter[`${counter}Counter`]({ canvas, setDistance })
   })
 }
 
