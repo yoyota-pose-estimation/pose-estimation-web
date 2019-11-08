@@ -10,10 +10,10 @@ const {
   influxdbUrl = 'https://influxdb.dudaji.org:443'
 } = queryString.parse(window.location.search)
 
-export function uploadImageToMinio(section, label, file) {
+export function uploadImageToMinio({ section, label, data }) {
   return axios.post(
     `https://multipart-to-minio.dudaji.org/upload/${section}/${label || ''}`,
-    file
+    data
   )
 }
 
