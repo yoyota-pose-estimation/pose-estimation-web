@@ -40,7 +40,7 @@ export default class {
         file,
         `${date}_browser_${user}_${distance}_${label}.jpg`
       )
-      uploadImageToMinio(this.name, label, data)
+      uploadImageToMinio({ data, label, section: this.name })
     }, 'image/jpeg')
   }
 }
