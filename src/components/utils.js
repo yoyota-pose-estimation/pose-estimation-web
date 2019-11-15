@@ -96,6 +96,6 @@ export function uploadMultiPersonImage(canvas) {
   canvas.toBlob((file) => {
     const data = new FormData()
     data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
-    return uploadImageToMinio('multiPerson', 'true', data)
+    return uploadImageToMinio({ section: 'multiPerson', label: 'true', data })
   }, 'image/jpeg')
 }
