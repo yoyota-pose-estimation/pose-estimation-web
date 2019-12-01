@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect } from 'react'
 import to from 'await-to-js'
 import getCounter from '../counters'
-import { drawKeypoints, uploadMultiPersonImage } from '../components/utils'
+import { drawKeypoints } from '../components/utils'
 
 function getCtx(canvas) {
   const ctx = canvas.getContext('2d')
@@ -43,15 +43,6 @@ async function estimatePose({ net, imageElement, setPoses }) {
   setPoses(ret)
 }
 
-function setUp({ setCtx, canvasRef, setDistance, setCounters, imageElement }) {
-  const canvas = canvasRef.current
-  const { width, height } = imageElement
-  canvas.width = width
-  canvas.height = height
-  setCounters(getCounter({ canvas, setDistance }))
-  setCtx(getCtx(canvas))
-}
-
 function drawStatusText({ ctx, counters, distance }) {
   ctx.font = '20px Verdana'
   ctx.fillStyle = 'aqua'
@@ -62,35 +53,10 @@ function drawStatusText({ ctx, counters, distance }) {
   })
 }
 
-export default function({ net, imageElement, canvasRef, intervalDelay }) {
-  const [distance, setDistance] = useState(0)
-  const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
-  const [poses, setPoses] = useState([{ keypoints: [] }])
-  const [counters, setCounters] = useState([])
-
-  useEffect(() => {
-    setUp({ setCtx, canvasRef, setDistance, setCounters, imageElement })
-  }, [imageElement, setUp])
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      estimatePose({ net, imageElement, setPoses })
-    }, intervalDelay)
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [net, imageElement, estimatePose, intervalDelay])
-
-  useEffect(() => {
-    if (poses.length > 1) {
-      uploadMultiPersonImage(canvasRef.current)
-      return
-    }
-    const { width, height } = imageElement
-    poses.forEach(({ keypoints }) => {
-      const processedKeypoints = processKeypoints({ keypoints, width, height })
-      counters.forEach((counter) => counter.checkPose(processedKeypoints))
-    })
+function useDrawCanvas({ ctx, poses, counters, distance, imageElement }) {
+  const { width, height } = imageElement
+  useLayoutEffect(() => {
+    ctx.drawImage(imageElement, 0, 0, width, height)
   }, [ctx, poses, counters, imageElement])
 
   useEffect(() => {
@@ -102,9 +68,52 @@ export default function({ net, imageElement, canvasRef, intervalDelay }) {
       drawKeypoints(keypoints, ctx)
     })
   }, [ctx, poses])
+}
 
-  useLayoutEffect(() => {
-    const { width, height } = imageElement
-    ctx.drawImage(imageElement, 0, 0, width, height)
+function useCheckPose({ ctx, poses, counters, imageElement }) {
+  const { width, height } = imageElement
+  useEffect(() => {
+    if (poses.length > 1) {
+      return
+    }
+    poses.forEach(({ keypoints }) => {
+      const processedKeypoints = processKeypoints({ keypoints, width, height })
+      counters.forEach((counter) => counter.checkPose(processedKeypoints))
+    })
   }, [ctx, poses, counters, imageElement])
+}
+
+function useCanvas({ canvasRef, imageElement }) {
+  const { current } = canvasRef
+  const { width, height } = imageElement
+  const [canvas, setCanvas] = useState(document.createElement('canvas'))
+  useLayoutEffect(() => {
+    if (!current) {
+      return
+    }
+    current.width = width
+    current.height = height
+    setCanvas(current)
+  }, [current])
+  return canvas
+}
+
+export default function({ net, imageElement, canvasRef, intervalDelay }) {
+  const [poses, setPoses] = useState([{ keypoints: [] }])
+  const [distance, setDistance] = useState(0)
+  const canvas = useCanvas({ canvasRef, imageElement })
+  const ctx = getCtx(canvas)
+  const counters = getCounter({ canvas, setDistance })
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      estimatePose({ net, imageElement, setPoses })
+    }, intervalDelay)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [net, imageElement, estimatePose, intervalDelay])
+
+  useCheckPose({ ctx, poses, counters, imageElement })
+  useDrawCanvas({ ctx, poses, counters, distance, imageElement })
 }

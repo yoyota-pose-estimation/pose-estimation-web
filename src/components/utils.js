@@ -89,10 +89,10 @@ export async function getInput() {
   return video
 }
 
-export function uploadMultiPersonImage(canvas) {
-  canvas.toBlob((file) => {
-    const data = new FormData()
-    data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
-    return uploadImageToMinio({ section: 'multiPerson', label: 'true', data })
-  }, 'image/jpeg')
-}
+// export function uploadMultiPersonImage(canvas) {
+//   canvas.toBlob((file) => {
+//     const data = new FormData()
+//     data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
+//     return uploadImageToMinio({ section: 'multiPerson', label: 'true', data })
+//   }, 'image/jpeg')
+// }
