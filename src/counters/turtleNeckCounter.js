@@ -40,6 +40,7 @@ export default class extends Counter {
     const { ear, hip } = turtleNeckKeypoints
     const distance = getDistance({ ear, direction, hip })
     this.uploadImage({ distance })
+    this.writeMeasurement('turtleNeckDistance', { distance })
   }
 }
 

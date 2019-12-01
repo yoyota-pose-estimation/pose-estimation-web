@@ -11,7 +11,7 @@ function getCtx(canvas) {
 }
 
 function processKeypoints({ keypoints, width, height }) {
-  const filteredKeypoints = keypoints.filter(({ score }) => score > 0.9)
+  const filteredKeypoints = keypoints.filter(({ score }) => score > 0.5)
   const normalizedKeypoints = filteredKeypoints.map((keypoint) => {
     const { position } = keypoint
     const { x, y } = position
@@ -30,79 +30,86 @@ function processKeypoints({ keypoints, width, height }) {
   }, {})
 }
 
+async function estimatePose({ net, imageElement, setPoses }) {
+  const [err, ret] = await to(
+    net.estimateMultiplePoses(imageElement, {
+      maxDetections: 2,
+      scoreThreshold: 0.2
+    })
+  )
+  if (err) {
+    window.location.reload()
+    return
+  }
+  setPoses(ret)
+}
+
+function setUp({ setCtx, canvasRef, setDistance, setCounters, imageElement }) {
+  const canvas = canvasRef.current
+  const { width, height } = imageElement
+  canvas.width = width
+  canvas.height = height
+  setCounters(getCounter({ canvas, setDistance }))
+  setCtx(getCtx(canvas))
+}
+
+function drawStatusText({ ctx, counters, distance }) {
+  ctx.font = '20px Verdana'
+  ctx.fillStyle = 'aqua'
+  ctx.fillText(`distance: ${distance}`, 100, 30)
+  counters.forEach(({ name, count }, index) => {
+    const text = `${name}: ${count}`
+    ctx.fillText(text, 100, 30 * (index + 2))
+  })
+}
+
 export default function({ net, loading, imageElement }) {
   const canvasRef = useRef()
-
   const [distance, setDistance] = useState(0)
   const [intervalDealy, setIntervalDelay] = useState(250)
   const [ctx, setCtx] = useState(getCtx(document.createElement('canvas')))
   const [poses, setPoses] = useState([{ keypoints: [] }])
   const [counters, setCounters] = useState([])
 
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current
-    const { width, height } = imageElement
-    canvas.width = width
-    canvas.height = height
-    setCounters(getCounter({ canvas, setDistance }))
-    setCtx(getCtx(canvas))
-  }, [imageElement])
+  useEffect(() => {
+    setUp({ setCtx, canvasRef, setDistance, setCounters, imageElement })
+  }, [imageElement, setUp])
 
   useEffect(() => {
-    async function estimatePose() {
-      const [err, ret] = await to(
-        net.estimateMultiplePoses(imageElement, {
-          maxDetections: 2,
-          scoreThreshold: 0.2
-        })
-      )
-      if (err) {
-        window.location.reload()
-        return
-      }
-      setPoses(ret)
-    }
     const intervalId = setInterval(() => {
-      estimatePose()
+      estimatePose({ net, imageElement, setPoses })
     }, intervalDealy)
     return () => {
       clearInterval(intervalId)
     }
-  }, [net, imageElement, intervalDealy])
+  }, [net, imageElement, estimatePose, intervalDealy])
 
-  useLayoutEffect(() => {
-    const { width, height } = imageElement
-    function drawImage() {
-      ctx.drawImage(imageElement, 0, 0, width, height)
-    }
-    function drawStatusText() {
-      ctx.font = '20px Verdana'
-      ctx.fillStyle = 'aqua'
-      ctx.fillText(`distance: ${distance}`, 100, 30)
-      counters.forEach(({ name, count }, index) => {
-        const text = `${name}: ${count}`
-        ctx.fillText(text, 100, 30 * (index + 2))
-      })
-    }
-    async function checkPose(pose) {
-      const { keypoints } = pose
-      const processedKeypoints = processKeypoints({ keypoints, width, height })
-      counters.forEach((counter) => counter.checkPose(processedKeypoints))
-    }
-    drawImage()
+  useEffect(() => {
     if (poses.length > 1) {
       uploadMultiPersonImage(canvasRef.current)
-      poses.forEach(({ keypoints }) => {
-        drawKeypoints(keypoints, ctx)
-      })
       return
     }
-    poses.forEach(checkPose)
-    drawStatusText()
+    const { width, height } = imageElement
+    poses.forEach(({ keypoints }) => {
+      const processedKeypoints = processKeypoints({ keypoints, width, height })
+      counters.forEach((counter) => counter.checkPose(processedKeypoints))
+    })
+  }, [ctx, poses, counters, imageElement])
+
+  useEffect(() => {
+    drawStatusText({ ctx, counters, distance })
+  }, [ctx, counters, distance])
+
+  useEffect(() => {
     poses.forEach(({ keypoints }) => {
       drawKeypoints(keypoints, ctx)
     })
-  }, [ctx, poses, counters, distance, imageElement])
+  }, [ctx, poses])
+
+  useLayoutEffect(() => {
+    const { width, height } = imageElement
+    ctx.drawImage(imageElement, 0, 0, width, height)
+  }, [ctx, poses, counters, imageElement])
 
   return (
     <EstimatorCanvas
