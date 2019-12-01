@@ -2,32 +2,13 @@ import { useState, useEffect } from 'react'
 import to from 'await-to-js'
 import useCanvas from './useCanvas'
 import getCounter from '../counters'
+import useCheckPose from './useCheckPose'
 import useDrawCanvas from './useDrawCanvas'
 
 function getCtx(canvas) {
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   return ctx
-}
-
-function processKeypoints({ keypoints, width, height }) {
-  const filteredKeypoints = keypoints.filter(({ score }) => score > 0.5)
-  const normalizedKeypoints = filteredKeypoints.map((keypoint) => {
-    const { position } = keypoint
-    const { x, y } = position
-    return {
-      ...keypoint,
-      position: {
-        x: x / width,
-        y: y / height
-      }
-    }
-  })
-  return normalizedKeypoints.reduce((prev, curr) => {
-    // eslint-disable-next-line no-param-reassign
-    prev[curr.part] = curr.position
-    return prev
-  }, {})
 }
 
 async function estimatePose({ net, imageElement, setPoses }) {
@@ -42,19 +23,6 @@ async function estimatePose({ net, imageElement, setPoses }) {
     return
   }
   setPoses(ret)
-}
-
-function useCheckPose({ ctx, poses, counters, imageElement }) {
-  useEffect(() => {
-    if (poses.length > 1) {
-      return
-    }
-    const { width, height } = imageElement
-    poses.forEach(({ keypoints }) => {
-      const processedKeypoints = processKeypoints({ keypoints, width, height })
-      counters.forEach((counter) => counter.checkPose(processedKeypoints))
-    })
-  }, [ctx, poses, counters, imageElement])
 }
 
 export default function({ net, imageElement, canvasRef, intervalDelay }) {
