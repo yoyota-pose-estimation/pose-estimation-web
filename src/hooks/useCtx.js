@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import useMergedStore from './useMergedStore'
 
 function getCtx(canvas) {
   const ctx = canvas.getContext('2d')
@@ -6,10 +7,12 @@ function getCtx(canvas) {
   return ctx
 }
 
-export default function({ canvas }) {
-  const [ctx, setCtx] = useState(canvas.getContext('2d'))
+export default function() {
+  const {
+    canvas: { canvas },
+    ctx: { setCtx }
+  } = useMergedStore()
   useEffect(() => {
     setCtx(getCtx(canvas))
-  }, [canvas])
-  return ctx
+  }, [canvas, setCtx])
 }
