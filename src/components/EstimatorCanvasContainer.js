@@ -4,22 +4,30 @@ import getCounter from '../counters'
 import { drawKeypoints, uploadMultiPersonImage } from './utils'
 import EstimatorCanvas from './EstimatorCanvas'
 
-function filterConfidentPart(keypoints, minConfidence) {
-  return keypoints.reduce((prev, curr) => {
-    const { part, score, position } = curr
-    if (score < minConfidence) {
-      return prev
-    }
-    // eslint-disable-next-line no-param-reassign
-    prev[part] = position
-    return prev
-  }, {})
-}
-
 function getCtx(canvas) {
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   return ctx
+}
+
+function processKeypoints({ keypoints, width, height }) {
+  const filteredKeypoints = keypoints.filter(({ score }) => score > 0.9)
+  const normalizedKeypoints = filteredKeypoints.map((keypoint) => {
+    const { position } = keypoint
+    const { x, y } = position
+    return {
+      ...keypoint,
+      position: {
+        x: x / width,
+        y: y / height
+      }
+    }
+  })
+  return normalizedKeypoints.reduce((prev, curr) => {
+    // eslint-disable-next-line no-param-reassign
+    prev[curr.part] = curr.position
+    return prev
+  }, {})
 }
 
 export default function({ net, loading, imageElement }) {
@@ -42,7 +50,12 @@ export default function({ net, loading, imageElement }) {
 
   useEffect(() => {
     async function estimatePose() {
-      const [err, ret] = await to(net.estimateMultiplePoses(imageElement))
+      const [err, ret] = await to(
+        net.estimateMultiplePoses(imageElement, {
+          maxDetections: 2,
+          scoreThreshold: 0.2
+        })
+      )
       if (err) {
         window.location.reload()
         return
@@ -58,8 +71,8 @@ export default function({ net, loading, imageElement }) {
   }, [net, imageElement, intervalDealy])
 
   useLayoutEffect(() => {
+    const { width, height } = imageElement
     function drawImage() {
-      const { width, height } = imageElement
       ctx.drawImage(imageElement, 0, 0, width, height)
     }
     function drawStatusText() {
@@ -71,24 +84,23 @@ export default function({ net, loading, imageElement }) {
         ctx.fillText(text, 100, 30 * (index + 2))
       })
     }
-    const threshold = 0.2
     async function checkPose(pose) {
       const { keypoints } = pose
-      const confidentKeypoints = filterConfidentPart(keypoints, threshold)
-      counters.forEach((counter) => counter.checkPose(confidentKeypoints))
+      const processedKeypoints = processKeypoints({ keypoints, width, height })
+      counters.forEach((counter) => counter.checkPose(processedKeypoints))
     }
     drawImage()
     if (poses.length > 1) {
       uploadMultiPersonImage(canvasRef.current)
       poses.forEach(({ keypoints }) => {
-        drawKeypoints(keypoints, threshold, ctx)
+        drawKeypoints(keypoints, ctx)
       })
       return
     }
     poses.forEach(checkPose)
     drawStatusText()
     poses.forEach(({ keypoints }) => {
-      drawKeypoints(keypoints, threshold, ctx)
+      drawKeypoints(keypoints, ctx)
     })
   }, [ctx, poses, counters, distance, imageElement])
 

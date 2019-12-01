@@ -37,11 +37,8 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
   ctx.fill()
 }
 
-export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
-  const confidentKeypoints = keypoints.filter(
-    ({ score }) => score > minConfidence
-  )
-  confidentKeypoints.forEach((keypoint) => {
+export function drawKeypoints(keypoints, ctx, scale = 1) {
+  keypoints.forEach((keypoint) => {
     const { y, x } = keypoint.position
     drawPoint(ctx, y * scale, x * scale, 2)
   })
