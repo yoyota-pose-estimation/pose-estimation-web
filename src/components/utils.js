@@ -1,7 +1,6 @@
 import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
-import { uploadImageToMinio } from '../counters/utils'
 
 const width = 300
 const height = 250

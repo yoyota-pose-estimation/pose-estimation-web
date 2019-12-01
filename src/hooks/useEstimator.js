@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect } from 'react'
 import to from 'await-to-js'
 import getCounter from '../counters'
-import { drawKeypoints } from '../components/utils'
+import useDrawCanvas from './useDrawCanvas'
 
 function getCtx(canvas) {
   const ctx = canvas.getContext('2d')
@@ -43,39 +43,12 @@ async function estimatePose({ net, imageElement, setPoses }) {
   setPoses(ret)
 }
 
-function drawStatusText({ ctx, counters, distance }) {
-  ctx.font = '20px Verdana'
-  ctx.fillStyle = 'aqua'
-  ctx.fillText(`distance: ${distance}`, 100, 30)
-  counters.forEach(({ name, count }, index) => {
-    const text = `${name}: ${count}`
-    ctx.fillText(text, 100, 30 * (index + 2))
-  })
-}
-
-function useDrawCanvas({ ctx, poses, counters, distance, imageElement }) {
-  const { width, height } = imageElement
-  useLayoutEffect(() => {
-    ctx.drawImage(imageElement, 0, 0, width, height)
-  }, [ctx, poses, counters, imageElement])
-
-  useEffect(() => {
-    drawStatusText({ ctx, counters, distance })
-  }, [ctx, counters, distance])
-
-  useEffect(() => {
-    poses.forEach(({ keypoints }) => {
-      drawKeypoints(keypoints, ctx)
-    })
-  }, [ctx, poses])
-}
-
 function useCheckPose({ ctx, poses, counters, imageElement }) {
-  const { width, height } = imageElement
   useEffect(() => {
     if (poses.length > 1) {
       return
     }
+    const { width, height } = imageElement
     poses.forEach(({ keypoints }) => {
       const processedKeypoints = processKeypoints({ keypoints, width, height })
       counters.forEach((counter) => counter.checkPose(processedKeypoints))
@@ -84,17 +57,17 @@ function useCheckPose({ ctx, poses, counters, imageElement }) {
 }
 
 function useCanvas({ canvasRef, imageElement }) {
-  const { current } = canvasRef
-  const { width, height } = imageElement
   const [canvas, setCanvas] = useState(document.createElement('canvas'))
   useLayoutEffect(() => {
+    const { current } = canvasRef
     if (!current) {
       return
     }
+    const { width, height } = imageElement
     current.width = width
     current.height = height
     setCanvas(current)
-  }, [current])
+  }, [canvasRef, imageElement])
   return canvas
 }
 
@@ -112,7 +85,7 @@ export default function({ net, imageElement, canvasRef, intervalDelay }) {
     return () => {
       clearInterval(intervalId)
     }
-  }, [net, imageElement, estimatePose, intervalDelay])
+  }, [net, setPoses, imageElement, intervalDelay])
 
   useCheckPose({ ctx, poses, counters, imageElement })
   useDrawCanvas({ ctx, poses, counters, distance, imageElement })
