@@ -1,5 +1,6 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import to from 'await-to-js'
+import useCanvas from './useCanvas'
 import getCounter from '../counters'
 import useDrawCanvas from './useDrawCanvas'
 
@@ -54,21 +55,6 @@ function useCheckPose({ ctx, poses, counters, imageElement }) {
       counters.forEach((counter) => counter.checkPose(processedKeypoints))
     })
   }, [ctx, poses, counters, imageElement])
-}
-
-function useCanvas({ canvasRef, imageElement }) {
-  const [canvas, setCanvas] = useState(document.createElement('canvas'))
-  useLayoutEffect(() => {
-    const { current } = canvasRef
-    if (!current) {
-      return
-    }
-    const { width, height } = imageElement
-    current.width = width
-    current.height = height
-    setCanvas(current)
-  }, [canvasRef, imageElement])
-  return canvas
 }
 
 export default function({ net, imageElement, canvasRef, intervalDelay }) {
