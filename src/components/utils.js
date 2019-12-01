@@ -1,7 +1,6 @@
 import to from 'await-to-js'
 import queryString from 'query-string'
 import * as posenet from '@tensorflow-models/posenet'
-import { uploadImageToMinio } from '../counters/utils'
 
 const width = 300
 const height = 250
@@ -37,11 +36,8 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
   ctx.fill()
 }
 
-export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
-  const confidentKeypoints = keypoints.filter(
-    ({ score }) => score > minConfidence
-  )
-  confidentKeypoints.forEach((keypoint) => {
+export function drawKeypoints(keypoints, ctx, scale = 1) {
+  keypoints.forEach((keypoint) => {
     const { y, x } = keypoint.position
     drawPoint(ctx, y * scale, x * scale, 2)
   })
@@ -92,10 +88,10 @@ export async function getInput() {
   return video
 }
 
-export function uploadMultiPersonImage(canvas) {
-  canvas.toBlob((file) => {
-    const data = new FormData()
-    data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
-    return uploadImageToMinio({ section: 'multiPerson', label: 'true', data })
-  }, 'image/jpeg')
-}
+// export function uploadMultiPersonImage(canvas) {
+//   canvas.toBlob((file) => {
+//     const data = new FormData()
+//     data.append('image', file, `${new Date().toISOString()}-browser.jpg`)
+//     return uploadImageToMinio({ section: 'multiPerson', label: 'true', data })
+//   }, 'image/jpeg')
+// }
