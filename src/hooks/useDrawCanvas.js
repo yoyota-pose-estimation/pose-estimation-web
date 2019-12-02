@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect } from 'react'
+import useMergedStore from './useMergedStore'
 import { drawKeypoints } from '../components/utils'
 
 function drawStatusText({ ctx, counters, distance }) {
@@ -11,7 +12,12 @@ function drawStatusText({ ctx, counters, distance }) {
   })
 }
 
-export default function({ ctx, poses, distance, counters, imageElement }) {
+export default function({ distance, counters }) {
+  const {
+    ctx: { ctx },
+    poses: { poses },
+    imageElement: { imageElement }
+  } = useMergedStore()
   useLayoutEffect(() => {
     const { width, height } = imageElement
     ctx.drawImage(imageElement, 0, 0, width, height)

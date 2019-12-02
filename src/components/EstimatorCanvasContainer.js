@@ -1,15 +1,17 @@
-import React, { useRef, useState } from 'react'
-import useEstimator from '../hooks/useEstimator'
+import React, { useRef } from 'react'
 import EstimatorCanvas from './EstimatorCanvas'
+import usePoseNet from '../hooks/usePoseNet'
+import useMergedStore from '../hooks/useMergedStore'
 
-export default function({ net, loading, imageElement }) {
+export default function() {
   const canvasRef = useRef()
-  const [intervalDelay, setIntervalDelay] = useState(250)
-  useEstimator({ net, imageElement, canvasRef, intervalDelay })
+  const {
+    intervalDelay: { intervalDelay, setIntervalDelay }
+  } = useMergedStore()
+  usePoseNet(canvasRef)
 
   return (
     <EstimatorCanvas
-      loading={loading}
       canvasRef={canvasRef}
       intervalDelay={intervalDelay}
       setIntervalDelay={setIntervalDelay}

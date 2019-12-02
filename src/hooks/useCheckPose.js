@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import useMergedStore from './useMergedStore'
 
 function processKeypoints({ keypoints, width, height }) {
   const filteredKeypoints = keypoints.filter(({ score }) => score > 0.5)
@@ -20,7 +21,11 @@ function processKeypoints({ keypoints, width, height }) {
   }, {})
 }
 
-export default function({ ctx, poses, counters, imageElement }) {
+export default function({ counters }) {
+  const {
+    poses: { poses },
+    imageElement: { imageElement }
+  } = useMergedStore()
   useEffect(() => {
     if (poses.length > 1) {
       return
@@ -30,5 +35,5 @@ export default function({ ctx, poses, counters, imageElement }) {
       const processedKeypoints = processKeypoints({ keypoints, width, height })
       counters.forEach((counter) => counter.checkPose(processedKeypoints))
     })
-  }, [ctx, poses, counters, imageElement])
+  }, [poses, counters, imageElement])
 }

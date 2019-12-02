@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { getNet, getInput } from './utils'
 import Prepare from './Prepare'
+import { getNet, getInput } from './utils'
+import useMergedStore from '../hooks/useMergedStore'
 
-export default function({ setNet, setImageElement }) {
+export default function() {
   const [loading, setLoading] = useState(true)
   const [errorText, setErrorText] = useState('')
+  const {
+    net: { setNet },
+    imageElement: { setImageElement }
+  } = useMergedStore()
 
   useEffect(() => {
     async function loadNet() {
