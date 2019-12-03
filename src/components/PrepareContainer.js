@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import Prepare from './Prepare'
-import { getInput } from '../utils'
-import useMergedStore from '../hooks/useMergedStore'
+import React, { useState, useEffect } from "react"
+import Prepare from "./Prepare"
+import { getInput } from "../utils"
+import useMergedStore from "../hooks/useMergedStore"
 
 export default function() {
   const [loading, setLoading] = useState(true)
-  const [errorText, setErrorText] = useState('')
+  const [errorText, setErrorText] = useState("")
   const {
     imageElement: { setImageElement }
   } = useMergedStore()

@@ -1,5 +1,5 @@
-import { beep } from './utils'
-import Counter from './counter'
+import { beep } from "./utils"
+import Counter from "./counter"
 
 function getBowKeypoints({ keypoints, direction }) {
   return {
@@ -12,7 +12,7 @@ function getBowKeypoints({ keypoints, direction }) {
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
-    this.name = 'bow'
+    this.name = "bow"
     this.stand = true
     this.down = false
     this.sensitivity = this.sensitivity ? this.sensitivity : 20
@@ -23,7 +23,7 @@ export default class extends Counter {
     if (leftEar && rightEar) {
       return
     }
-    const direction = leftEar ? 'left' : 'right'
+    const direction = leftEar ? "left" : "right"
     const bowKeypoints = getBowKeypoints({ keypoints, direction })
     const { ear, hip, knee } = bowKeypoints
     if (!ear || !hip) {

@@ -1,10 +1,10 @@
-import { useEffect, useLayoutEffect } from 'react'
-import useMergedStore from './useMergedStore'
-import { drawKeypoints } from '../utils'
+import { useEffect, useLayoutEffect } from "react"
+import useMergedStore from "./useMergedStore"
+import { drawKeypoints } from "../utils"
 
 function drawStatusText({ ctx, counters, distance }) {
-  ctx.font = '20px Verdana'
-  ctx.fillStyle = 'aqua'
+  ctx.font = "20px Verdana"
+  ctx.fillStyle = "aqua"
   ctx.fillText(`distance: ${distance}`, 100, 30)
   counters.forEach(({ name, count }, index) => {
     const text = `${name}: ${count}`

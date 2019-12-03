@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import getCounter from '../counters'
-import useMergedStore from './useMergedStore'
+import { useState, useEffect } from "react"
+import getCounter from "../counters"
+import useMergedStore from "./useMergedStore"
 
 export default function({ setDistance }) {
   const {

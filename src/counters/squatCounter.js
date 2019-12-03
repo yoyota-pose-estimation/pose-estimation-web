@@ -1,10 +1,10 @@
-import { beep } from './utils'
-import Counter from './counter'
+import { beep } from "./utils"
+import Counter from "./counter"
 
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
-    this.name = 'squat'
+    this.name = "squat"
     this.sit = false
     this.sensitivity = this.sensitivity ? this.sensitivity : 40
   }

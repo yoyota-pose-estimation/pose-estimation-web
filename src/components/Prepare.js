@@ -1,5 +1,5 @@
-import React from 'react'
-import LoadingText from './LoadingText'
+import React from "react"
+import LoadingText from "./LoadingText"
 
 export default function({ loading, errorText }) {
   return (

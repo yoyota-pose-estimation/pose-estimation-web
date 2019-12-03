@@ -1,8 +1,8 @@
-import queryString from 'query-string'
-import pullUpCounter from './pullUpCounter'
-import turtleNeckCounter from './turtleNeckCounter'
-import squatCounter from './squatCounter'
-import bowCounter from './bowCounter'
+import queryString from "query-string"
+import pullUpCounter from "./pullUpCounter"
+import turtleNeckCounter from "./turtleNeckCounter"
+import squatCounter from "./squatCounter"
+import bowCounter from "./bowCounter"
 
 function getCounter({ canvas, setDistance }) {
   const parsed = queryString.parse(window.location.search)
@@ -14,10 +14,10 @@ function getCounter({ canvas, setDistance }) {
   }
 
   if (!parsed.counter) {
-    return Object.values(allCounter).map((V) => new V({ canvas, setDistance }))
+    return Object.values(allCounter).map(V => new V({ canvas, setDistance }))
   }
 
-  return parsed.counter.split(',').map((counter) => {
+  return parsed.counter.split(",").map(counter => {
     return new allCounter[`${counter}Counter`]({ canvas, setDistance })
   })
 }
