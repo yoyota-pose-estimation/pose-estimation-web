@@ -5,23 +5,24 @@ import useCheckPose from './useCheckPose'
 import useDrawCanvas from './useDrawCanvas'
 import useInterval from './useInterval'
 import useCounters from './useCounters'
-import useEstimator from './useEstimator'
+import usePoseEstimator from './usePoseEstimator'
 import useMergedStore from './useMergedStore'
 
 export default function(canvasRef) {
   const {
+    imageElement: { imageElement },
     intervalDelay: { intervalDelay }
   } = useMergedStore()
   const [distance, setDistance] = useState(0)
   useCanvas(canvasRef)
   useCtx()
   const counters = useCounters({ setDistance })
-  const estimatePose = useEstimator()
+  const [poses, estimatePose] = usePoseEstimator()
 
   useInterval({
     intervalDelay,
-    fn: () => estimatePose()
+    fn: () => estimatePose(imageElement)
   })
-  useCheckPose({ counters })
-  useDrawCanvas({ counters, distance })
+  useCheckPose({ poses, counters })
+  useDrawCanvas({ poses, counters, distance })
 }

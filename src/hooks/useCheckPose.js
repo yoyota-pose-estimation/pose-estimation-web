@@ -21,9 +21,8 @@ function processKeypoints({ keypoints, width, height }) {
   }, {})
 }
 
-export default function({ counters }) {
+export default function({ poses, counters }) {
   const {
-    poses: { poses },
     imageElement: { imageElement }
   } = useMergedStore()
   useEffect(() => {
