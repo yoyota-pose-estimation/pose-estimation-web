@@ -1,6 +1,5 @@
 import to from 'await-to-js'
 import queryString from 'query-string'
-import * as posenet from '@tensorflow-models/posenet'
 
 const width = 300
 const height = 250
@@ -15,18 +14,6 @@ function isiOS() {
 
 export function isMobile() {
   return isAndroid() || isiOS()
-}
-
-export function getNet() {
-  if (isMobile()) {
-    return posenet.load()
-  }
-  return posenet.load({
-    architecture: 'ResNet50',
-    outputStride: 32,
-    inputResolution: 257,
-    quantBytes: 2
-  })
 }
 
 function drawPoint(ctx, y, x, r, color = 'aqua') {

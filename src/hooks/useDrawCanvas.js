@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect } from 'react'
 import useMergedStore from './useMergedStore'
-import { drawKeypoints } from '../components/utils'
+import { drawKeypoints } from '../utils'
 
 function drawStatusText({ ctx, counters, distance }) {
   ctx.font = '20px Verdana'
@@ -12,10 +12,9 @@ function drawStatusText({ ctx, counters, distance }) {
   })
 }
 
-export default function({ distance, counters }) {
+export default function({ poses, distance, counters }) {
   const {
     ctx: { ctx },
-    poses: { poses },
     imageElement: { imageElement }
   } = useMergedStore()
   useLayoutEffect(() => {
