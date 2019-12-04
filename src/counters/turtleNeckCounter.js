@@ -1,4 +1,4 @@
-import Counter from './counter'
+import Counter from "./counter"
 
 function getTurtleNeckKeypoints({ keypoints, direction }) {
   return {
@@ -8,7 +8,7 @@ function getTurtleNeckKeypoints({ keypoints, direction }) {
 }
 
 function getDistance({ ear, direction, hip }) {
-  if (direction === 'left') {
+  if (direction === "left") {
     return ear.x - hip.x
   }
   return hip.x - ear.x
@@ -17,31 +17,31 @@ function getDistance({ ear, direction, hip }) {
 function getDirection(keypoints) {
   const { leftEar, rightEar } = keypoints
   if (leftEar && rightEar) {
-    return 'front'
+    return "front"
   }
-  return leftEar ? 'left' : 'right'
+  return leftEar ? "left" : "right"
 }
 
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
-    this.name = 'turtleNeck'
+    this.name = "turtleNeck"
   }
 
   checkPose(keypoints) {
     const direction = getDirection(keypoints)
-    if (direction === 'front') {
+    if (direction === "front") {
       return
     }
     const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
-    if (!Object.values(turtleNeckKeypoints).every((point) => point)) {
+    if (!Object.values(turtleNeckKeypoints).every(point => point)) {
       return
     }
     const { ear, hip } = turtleNeckKeypoints
     const distance = getDistance({ ear, direction, hip })
     this.uploadImage({ distance })
     this.setDistance(distance)
-    this.writeMeasurement('turtleNeckDistance', { distance })
+    this.writeMeasurement("turtleNeckDistance", { distance })
   }
 }
 

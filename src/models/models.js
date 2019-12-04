@@ -22,7 +22,7 @@ export const intervalDelay = {
 
 export const canvas = {
   state: {
-    canvas: document.createElement('canvas')
+    canvas: document.createElement("canvas")
   },
   reducers: {
     setCanvas(_, payload) {
@@ -33,7 +33,7 @@ export const canvas = {
 
 export const ctx = {
   state: {
-    ctx: document.createElement('canvas').getContext('2d')
+    ctx: document.createElement("canvas").getContext("2d")
   },
   reducers: {
     setCtx(_, payload) {

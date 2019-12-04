@@ -1,5 +1,5 @@
-import { useLayoutEffect } from 'react'
-import useMergedStore from './useMergedStore'
+import { useLayoutEffect } from "react"
+import useMergedStore from "./useMergedStore"
 
 export default function(canvasRef) {
   const {

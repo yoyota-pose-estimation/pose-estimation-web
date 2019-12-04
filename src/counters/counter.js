@@ -1,7 +1,7 @@
-import queryString from 'query-string'
-import { saveToInfluxDb, uploadImageToMinio } from './utils'
+import queryString from "query-string"
+import { saveToInfluxDb, uploadImageToMinio } from "./utils"
 
-const { sensitivity, upload = true, user = 'fitness' } = queryString.parse(
+const { sensitivity, upload = true, user = "fitness" } = queryString.parse(
   window.location.search
 )
 
@@ -9,7 +9,7 @@ export default class {
   constructor({ canvas, setDistance }) {
     this.canvas = canvas
     this.setDistance = setDistance
-    this.name = ''
+    this.name = ""
     this.count = 0
     this.ear = null
     this.eye = null
@@ -33,14 +33,14 @@ export default class {
       return
     }
     const date = new Date().toISOString()
-    this.canvas.toBlob((file) => {
+    this.canvas.toBlob(file => {
       const data = new FormData()
       data.append(
-        'image',
+        "image",
         file,
         `${date}_browser_${user}_${distance}_${label}.jpg`
       )
       uploadImageToMinio({ data, label, section: this.name })
-    }, 'image/jpeg')
+    }, "image/jpeg")
   }
 }

@@ -1,5 +1,5 @@
-import to from 'await-to-js'
-import queryString from 'query-string'
+import to from "await-to-js"
+import queryString from "query-string"
 
 const width = 300
 const height = 250
@@ -16,7 +16,7 @@ export function isMobile() {
   return isAndroid() || isiOS()
 }
 
-function drawPoint(ctx, y, x, r, color = 'aqua') {
+function drawPoint(ctx, y, x, r, color = "aqua") {
   ctx.beginPath()
   ctx.arc(x, y, r, 0, 2 * Math.PI)
   ctx.fillStyle = color
@@ -24,7 +24,7 @@ function drawPoint(ctx, y, x, r, color = 'aqua') {
 }
 
 export function drawKeypoints(keypoints, ctx, scale = 1) {
-  keypoints.forEach((keypoint) => {
+  keypoints.forEach(keypoint => {
     const { y, x } = keypoint.position
     drawPoint(ctx, y * scale, x * scale, 2)
   })
@@ -33,10 +33,10 @@ export function drawKeypoints(keypoints, ctx, scale = 1) {
 async function setupCamera() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     throw new Error(
-      'Browser API navigator.mediaDevices.getUserMedia not available'
+      "Browser API navigator.mediaDevices.getUserMedia not available"
     )
   }
-  const video = document.createElement('video')
+  const video = document.createElement("video")
   video.width = width
   video.height = height
 
@@ -44,7 +44,7 @@ async function setupCamera() {
   const stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: {
-      facingMode: 'user',
+      facingMode: "user",
       width: mobile ? undefined : width,
       height: mobile ? undefined : height
     }
@@ -52,7 +52,7 @@ async function setupCamera() {
   video.srcObject = stream
   video.playsInline = true
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     video.onloadedmetadata = () => {
       resolve(video)
     }
@@ -63,7 +63,7 @@ export async function getInput() {
   const { camUrl } = queryString.parse(window.location.search)
   if (camUrl) {
     const img = new Image(width, height)
-    img.crossOrigin = 'Anonymous'
+    img.crossOrigin = "Anonymous"
     img.src = camUrl
     return img
   }

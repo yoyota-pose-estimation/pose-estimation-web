@@ -1,11 +1,11 @@
-import { beep } from './utils'
-import Counter from './counter'
+import { beep } from "./utils"
+import Counter from "./counter"
 
 export default class extends Counter {
   constructor(canvas) {
     super(canvas)
     this.up = 0
-    this.name = 'pullUp'
+    this.name = "pullUp"
   }
 
   upPosition() {
