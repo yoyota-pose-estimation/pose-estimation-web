@@ -15,23 +15,6 @@ function getNet() {
   })
 }
 
-const initialNet = {
-  estimateSinglePose() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ keypoints: [] })
-      })
-    })
-  },
-  estimateMultiplePoses() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve([{ keypoints: [] }])
-      })
-    })
-  }
-}
-
 export default function() {
   const [net, setNet] = useState(null)
   useEffect(() => {

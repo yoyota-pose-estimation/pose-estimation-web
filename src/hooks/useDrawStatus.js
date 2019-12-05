@@ -1,15 +1,12 @@
-import { useLayoutEffect } from "react"
 import useCtx from "./useCtx"
+import useRequestAnimationFrame from "./useRequestAnimationFrame"
 
-export default function({ poses, counters }) {
+export default function({ label, count }) {
   const ctx = useCtx()
-  useLayoutEffect(() => {
+  useRequestAnimationFrame(() => {
     ctx.font = "20px Verdana"
     ctx.fillStyle = "aqua"
-    // ctx.fillText(`distance: ${distance}`, 100, 30)
-    counters.forEach(({ name, count }, index) => {
-      const text = `${name}: ${count}`
-      ctx.fillText(text, 100, 30 * (index + 2))
-    })
-  }, [poses, counters, ctx])
+    const text = `${label}: ${count}`
+    ctx.fillText(text, 100, 30)
+  })
 }

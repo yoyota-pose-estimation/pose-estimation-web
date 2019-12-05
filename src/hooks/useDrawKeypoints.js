@@ -1,5 +1,5 @@
-import { useLayoutEffect } from "react"
 import useCtx from "./useCtx"
+import useRequestAnimationFrame from "./useRequestAnimationFrame"
 
 function drawPoint(ctx, y, x, r, color = "aqua") {
   ctx.beginPath()
@@ -17,9 +17,9 @@ function drawKeypoints(keypoints, ctx, scale = 1) {
 
 export default function(poses) {
   const ctx = useCtx()
-  useLayoutEffect(() => {
+  useRequestAnimationFrame(() => {
     poses.forEach(({ keypoints }) => {
       drawKeypoints(keypoints, ctx)
     })
-  }, [ctx, poses])
+  })
 }
