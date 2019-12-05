@@ -4,15 +4,13 @@ import usePoseNet from "../hooks/usePoseNet"
 import useMergedStore from "../hooks/useMergedStore"
 
 export default function() {
-  const canvasRef = useRef()
   const {
     intervalDelay: { intervalDelay, setIntervalDelay }
   } = useMergedStore()
-  usePoseNet(canvasRef)
+  usePoseNet()
 
   return (
     <EstimatorCanvas
-      canvasRef={canvasRef}
       intervalDelay={intervalDelay}
       setIntervalDelay={setIntervalDelay}
     />

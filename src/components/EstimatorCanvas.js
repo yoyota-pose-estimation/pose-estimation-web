@@ -1,6 +1,7 @@
 import React from "react"
+import { width, height } from "../utils"
 
-export default function({ canvasRef, intervalDelay, setIntervalDelay }) {
+export default function({ intervalDelay, setIntervalDelay }) {
   return (
     <>
       <div>
@@ -14,7 +15,12 @@ export default function({ canvasRef, intervalDelay, setIntervalDelay }) {
           onChange={e => setIntervalDelay(e.target.value)}
         />
       </div>
-      <canvas ref={canvasRef} style={{ height: "100vh" }} />
+      <canvas
+        id="canvas"
+        width={width}
+        height={height}
+        style={{ height: "100vh" }}
+      />
     </>
   )
 }

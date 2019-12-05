@@ -9,10 +9,10 @@ function getCtx(canvas) {
 
 export default function() {
   const {
-    canvas: { canvas },
     ctx: { setCtx }
   } = useMergedStore()
   useEffect(() => {
+    const canvas = document.getElementById("canvas")
     setCtx(getCtx(canvas))
-  }, [canvas, setCtx])
+  }, [setCtx])
 }

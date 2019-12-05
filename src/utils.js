@@ -1,8 +1,8 @@
 import to from "await-to-js"
 import queryString from "query-string"
 
-const width = 300
-const height = 250
+export const width = 300
+export const height = 250
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent)
