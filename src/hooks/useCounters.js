@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react"
 import getCounter from "../counters"
-import useMergedStore from "./useMergedStore"
+import useCanvas from "./useCanvas"
 
-export default function({ setDistance }) {
-  const {
-    canvas: { canvas }
-  } = useMergedStore()
+export default function() {
+  const canvas = useCanvas()
   const [counters, setCounters] = useState([])
   useEffect(() => {
-    setCounters(getCounter({ canvas, setDistance }))
-  }, [canvas, setDistance])
+    setCounters(getCounter({ canvas }))
+  }, [canvas])
   return counters
 }
