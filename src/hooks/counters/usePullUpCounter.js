@@ -2,8 +2,9 @@ import { useState, useEffect } from "react"
 import { beep } from "./utils"
 
 export default function(keypoints) {
-  const [up, setUp] = useState(0)
+  const [down, setDown] = useState(false)
   const [count, setCount] = useState(0)
+  const [distance, setDistance] = useState(0)
   useEffect(() => {
     const {
       leftShoulder,
@@ -20,24 +21,23 @@ export default function(keypoints) {
       return
     }
 
-    if (elbow.y < shoulder.y) {
-      setUp(Math.max(this.up, this.elbow.y))
-      return
-    }
-
-    if (up > elbow.y) {
+    setDistance(elbow.y - shoulder.y)
+    const up = distance > 0
+    if (down && up) {
       beep.play()
       setCount(count + 1)
-      setUp(0)
-      return
     }
+    setDown(!up)
 
     const wrist = leftWrist || rightWrist
     if (!wrist) {
       return
     }
-    if (wrist.y > elbow.y && count > 0) {
+    const rest = wrist.y > elbow.y
+    if (rest) {
+      setDistance(shoulder.y - wrist.y)
       setCount(0)
     }
-  }, [count, keypoints, up])
+  }, [keypoints, down, count, distance])
+  return count
 }
