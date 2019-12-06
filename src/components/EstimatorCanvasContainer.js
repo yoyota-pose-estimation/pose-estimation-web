@@ -1,31 +1,23 @@
-import React, { useState, useLayoutEffect } from "react"
-import useCtx from "../hooks/useCtx"
+import React, { useState } from "react"
 import useInterval from "../hooks/useInterval"
-import useCounters from "../hooks/useCounters"
-import useDrawStatus from "../hooks/useDrawStatus"
 import EstimatorCanvas from "./EstimatorCanvas"
-import useCheckPose from "../hooks/useCheckPose"
 import useDrawKeypoints from "../hooks/useDrawKeypoints"
 import usePoseEstimator from "../hooks/usePoseEstimator"
+import useDrawImage from "../hooks/useDrawImage"
+import CounterContainer from "./CounterContainer"
 
 export default function({ net, inputImage }) {
-  const ctx = useCtx()
   const [intervalDelay, setIntervalDelay] = useState(200)
   const [poses, estimatePoses] = usePoseEstimator(net)
   useInterval({
     intervalDelay,
     fn: () => estimatePoses(inputImage)
   })
-  useLayoutEffect(() => {
-    const { width, height } = inputImage
-    ctx.drawImage(inputImage, 0, 0, width, height)
-  }, [ctx, inputImage, poses])
+  useDrawImage(inputImage)
   useDrawKeypoints(poses)
-  const counters = useCounters()
-  useCheckPose({ poses, counters })
-  useDrawStatus({ counters, poses })
   return (
     <>
+      <CounterContainer poses={poses} />
       <EstimatorCanvas
         intervalDelay={intervalDelay}
         setIntervalDelay={setIntervalDelay}

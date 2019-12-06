@@ -1,4 +1,4 @@
-import Counter from "./counter"
+import { useState, useEffect } from "react"
 
 function getTurtleNeckKeypoints({ keypoints, direction }) {
   return {
@@ -7,7 +7,7 @@ function getTurtleNeckKeypoints({ keypoints, direction }) {
   }
 }
 
-function getDistance({ ear, direction, hip }) {
+function calculateDistance({ ear, direction, hip }) {
   if (direction === "left") {
     return ear.x - hip.x
   }
@@ -22,27 +22,27 @@ function getDirection(keypoints) {
   return leftEar ? "left" : "right"
 }
 
-export default class extends Counter {
-  constructor(canvas) {
-    super(canvas)
-    this.name = "turtleNeck"
-  }
-
-  checkPose(keypoints) {
+export default function(keypoints) {
+  const [distance, setDistance] = useState()
+  useEffect(() => {
     const direction = getDirection(keypoints)
     if (direction === "front") {
+      setDistance(null)
       return
     }
     const turtleNeckKeypoints = getTurtleNeckKeypoints({ keypoints, direction })
     if (!Object.values(turtleNeckKeypoints).every(point => point)) {
+      setDistance(null)
       return
     }
     const { ear, hip } = turtleNeckKeypoints
-    const distance = getDistance({ ear, direction, hip })
-    this.count = distance
-    this.uploadImage({ distance })
-    this.writeMeasurement("turtleNeckDistance", { distance })
-  }
+    const earToHipDistance = calculateDistance({ ear, direction, hip })
+    setDistance(earToHipDistance)
+
+    // this.uploadImage({ distance })
+    // this.writeMeasurement("turtleNeckDistance", { distance })
+  }, [setDistance, keypoints])
+  return distance
 }
 
 // import { Deque } from './utils'
