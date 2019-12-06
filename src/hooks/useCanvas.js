@@ -1,19 +1,16 @@
-import { useLayoutEffect } from "react"
-import useMergedStore from "./useMergedStore"
+import { useState, useLayoutEffect } from "react"
+import { width, height } from "../utils"
 
-export default function(canvasRef) {
-  const {
-    canvas: { setCanvas },
-    imageElement: { imageElement }
-  } = useMergedStore()
+export default function(id = "canvas") {
+  const [canvasState, setCanvas] = useState(document.createElement("canvas"))
   useLayoutEffect(() => {
-    const { current } = canvasRef
-    if (!current) {
+    const canvas = document.getElementById(id)
+    if (!canvas) {
       return
     }
-    const { width, height } = imageElement
-    current.width = width
-    current.height = height
-    setCanvas(current)
-  }, [canvasRef, setCanvas, imageElement])
+    canvas.width = width
+    canvas.height = height
+    setCanvas(canvas)
+  }, [id])
+  return canvasState
 }

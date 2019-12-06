@@ -1,8 +1,8 @@
 import to from "await-to-js"
 import queryString from "query-string"
 
-const width = 300
-const height = 250
+export const width = 300
+export const height = 250
 
 function isAndroid() {
   return /Android/i.test(navigator.userAgent)
@@ -14,20 +14,6 @@ function isiOS() {
 
 export function isMobile() {
   return isAndroid() || isiOS()
-}
-
-function drawPoint(ctx, y, x, r, color = "aqua") {
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, 2 * Math.PI)
-  ctx.fillStyle = color
-  ctx.fill()
-}
-
-export function drawKeypoints(keypoints, ctx, scale = 1) {
-  keypoints.forEach(keypoint => {
-    const { y, x } = keypoint.position
-    drawPoint(ctx, y * scale, x * scale, 2)
-  })
 }
 
 async function setupCamera() {

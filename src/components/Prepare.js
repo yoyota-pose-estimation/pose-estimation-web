@@ -1,11 +1,15 @@
 import React from "react"
-import LoadingText from "./LoadingText"
 
-export default function({ loading, errorText }) {
+export default function(params) {
+  const { net, inputImage } = params
   return (
     <>
-      <p>{errorText}</p>
-      <LoadingText loading={loading} />
+      <p>{net ? "" : "loading posenet model.."}</p>
+      <p>
+        {inputImage
+          ? ""
+          : "this browser does not support video capture, or this device does not have a camera"}
+      </p>
     </>
   )
 }

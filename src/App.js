@@ -1,14 +1,20 @@
 import React from "react"
-import PrepareContainer from "./components/PrepareContainer"
+import Prepare from "./components/Prepare"
 import EstimatorCanvasContainer from "./components/EstimatorCanvasContainer"
+import useInputImage from "./hooks/useInputImage"
+import useLoadPoseNet from "./hooks/useLoadPoseNet"
 
-function App() {
+export default function() {
+  const inputImage = useInputImage()
+  const net = useLoadPoseNet()
+
+  if (!net || !inputImage) {
+    return <Prepare net={net} inputImage={inputImage} />
+  }
+
   return (
     <>
-      <PrepareContainer />
-      <EstimatorCanvasContainer />
+      <EstimatorCanvasContainer net={net} inputImage={inputImage} />
     </>
   )
 }
-
-export default App
