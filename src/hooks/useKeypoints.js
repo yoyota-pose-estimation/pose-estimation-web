@@ -15,22 +15,16 @@ function processKeypoints({ keypoints }) {
     }
   })
   return normalizedKeypoints.reduce((prev, curr) => {
-    // eslint-disable-next-line no-param-reassign
     prev[curr.part] = curr.position
     return prev
   }, {})
 }
 
-export default function(poses) {
-  const [keypoints, setKeypoints] = useState([])
+export default function(pose) {
+  const [keypoints, setKeypoints] = useState({})
   useEffect(() => {
-    if (poses.length !== 1) {
-      setKeypoints([])
-      return
-    }
-    const [pose] = poses
     const processedKeypoints = processKeypoints(pose)
     setKeypoints(processedKeypoints)
-  }, [poses, setKeypoints])
+  }, [pose, setKeypoints])
   return keypoints
 }

@@ -1,6 +1,7 @@
 FROM node:lts-alpine as install
 WORKDIR /usr/src/app
 COPY package.json .
+RUN apk add git
 RUN npm install
 COPY . .
 CMD ["npm", "start"]

@@ -9,11 +9,12 @@
     "await-to-js": "^2.1.1",
     "axios": "^0.19.0",
     "influx": "^5.0.0-alpha.4",
+    "posenet-react": "git+https://github.com/yoyota/posenet-react.git",
     "query-string": "^6.8.2",
     "react": "^16.8.6",
-    "react-bootstrap": "^1.0.0-beta.10",
+    "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.3.0",
     "react-select": "^3.0.8"
   },
   "scripts": {

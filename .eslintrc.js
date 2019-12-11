@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     'no-alert': 'error',
     'no-console': 'error',
+    "no-param-reassign": ["error", { props: false }],
     'react/prop-types': 'off',
     'react/jsx-filename-extension': 'off',
     'react-hooks/rules-of-hooks': 'error',

@@ -1,5 +1,4 @@
 import { useState, useLayoutEffect } from "react"
-import { width, height } from "../utils"
 
 export default function(id = "canvas") {
   const [canvasState, setCanvas] = useState(document.createElement("canvas"))
@@ -8,8 +7,6 @@ export default function(id = "canvas") {
     if (!canvas) {
       return
     }
-    canvas.width = width
-    canvas.height = height
     setCanvas(canvas)
   }, [id])
   return canvasState

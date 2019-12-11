@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import axios from "axios"
 import useCanvas from "../hooks/useCanvas"
 import useCounter from "../hooks/useCounter"
-import useDrawStatus from "../hooks/useDrawStatus"
 
 function uploadImageToMinio({ section, data }) {
   return axios.post(
@@ -24,15 +23,14 @@ function uploadImage({ canvas, section, distance }) {
   }, "image/jpeg")
 }
 
-export default function({ poses, label, counter }) {
+export default function({ keypoints, label, counter }) {
   const canvas = useCanvas()
-  const { count, distance } = useCounter({ poses, counter })
+  const { count, distance } = useCounter({ keypoints, counter })
   useEffect(() => {
     if (!distance) {
       return
     }
     uploadImage({ canvas, distance, section: label })
   }, [canvas, distance, label])
-  // useDrawStatus({ label, count, distance })
   return <></>
 }

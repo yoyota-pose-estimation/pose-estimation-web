@@ -1,9 +1,5 @@
-import useKeypoints from "./useKeypoints"
-
-export default function({ poses, counter }) {
-  const keypoints = useKeypoints(poses)
+export default function({ keypoints, counter }) {
   const useCounter = counter
   const count = useCounter(keypoints)
-
   return count
 }

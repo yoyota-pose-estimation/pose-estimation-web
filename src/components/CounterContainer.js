@@ -3,7 +3,7 @@ import Select from "react-select"
 import Counter from "./Counter"
 import options from "../hooks/counters"
 
-export default function({ poses }) {
+export default function({ keypoints }) {
   const [selectedOption, selectOption] = useState(null)
   if (!selectedOption) {
     return (
@@ -23,9 +23,9 @@ export default function({ poses }) {
         }}
       />
       <Counter
-        poses={poses}
-        label={selectedOption.label}
         counter={selectedOption.value}
+        keypoints={keypoints}
+        label={selectedOption.label}
       />
     </>
   )
