@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import useInterval from "../hooks/useInterval"
 import EstimatorCanvas from "./EstimatorCanvas"
-import useDrawKeypoints from "../hooks/useDrawKeypoints"
 import usePoseEstimator from "../hooks/usePoseEstimator"
 import useDrawImage from "../hooks/useDrawImage"
 import CounterContainer from "./CounterContainer"
@@ -13,8 +12,7 @@ export default function({ net, inputImage }) {
     intervalDelay,
     fn: () => estimatePoses(inputImage)
   })
-  useDrawImage(inputImage)
-  useDrawKeypoints(poses)
+  useDrawImage({ img: inputImage, poses })
   return (
     <>
       <CounterContainer poses={poses} />

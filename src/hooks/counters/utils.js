@@ -47,36 +47,3 @@ export function saveToInfluxDb(measurement, fields) {
     }
   ])
 }
-
-export class Deque {
-  constructor(maxlen = 100) {
-    this.maxlen = maxlen
-    this.array = new Array(this.maxlen).fill(false)
-  }
-
-  push(item) {
-    if (this.array.length === this.maxlen) {
-      this.array.shift()
-    }
-    this.array.push(item)
-  }
-
-  unshift(item) {
-    if (this.array.length === this.maxlen) {
-      this.array.pop()
-    }
-    this.array.unshift(item)
-  }
-
-  insert(item) {
-    if (item) {
-      this.push(item)
-    } else {
-      this.unshift(item)
-    }
-  }
-
-  trueCount() {
-    return this.array.filter(item => item).length
-  }
-}

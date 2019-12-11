@@ -42,7 +42,7 @@ export default function(keypoints) {
     // this.uploadImage({ distance })
     // this.writeMeasurement("turtleNeckDistance", { distance })
   }, [setDistance, keypoints])
-  return distance
+  return { distance }
 }
 
 // import { Deque } from './utils'

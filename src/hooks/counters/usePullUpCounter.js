@@ -39,5 +39,5 @@ export default function(keypoints) {
       setCount(0)
     }
   }, [keypoints, down, count, distance])
-  return count
+  return { count, distance }
 }

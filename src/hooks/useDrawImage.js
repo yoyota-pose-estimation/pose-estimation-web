@@ -1,11 +1,10 @@
+import { useLayoutEffect } from "react"
 import useCtx from "./useCtx"
-import useRequestAnimationFrame from "./useRequestAnimationFrame"
 
-export default function(img) {
+export default function({ img, poses }) {
   const ctx = useCtx()
-  function drawFrame() {
-    const { width, height } = img
+  const { width, height } = img
+  useLayoutEffect(() => {
     ctx.drawImage(img, 0, 0, width, height)
-  }
-  useRequestAnimationFrame(drawFrame)
+  }, [ctx, height, img, poses, width])
 }
