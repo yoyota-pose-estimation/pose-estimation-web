@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from "react"
 import PoseNet from "posenet-react"
-import useKeypoints from "../hooks/useKeypoints"
 import CounterContainer from "./CounterContainer"
 
-const width = 300
-const height = 250
+const width = 600
+const height = 500
 
 function processKeypoints({ keypoints }) {
   const filteredKeypoints = keypoints.filter(({ score }) => score > 0.5)
@@ -32,6 +31,7 @@ export default function() {
     if (poses.length !== 1) {
       return
     }
+    console.log("date1: ", new Date().getTime())
     setKeypoints(processKeypoints(poses[0]))
   }, [])
 
@@ -44,6 +44,9 @@ export default function() {
         onChange={onChange}
         width={width}
         height={height}
+        modelConfig={{
+          architecture: "ResNet50"
+        }}
       />
     </>
   )

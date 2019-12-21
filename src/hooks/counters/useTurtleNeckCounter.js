@@ -23,7 +23,6 @@ function getDirection(keypoints) {
 }
 
 export default function(keypoints) {
-  console.log("useTurtleNeck")
   const [distance, setDistance] = useState()
   useEffect(() => {
     const direction = getDirection(keypoints)

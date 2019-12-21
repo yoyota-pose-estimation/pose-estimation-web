@@ -25,11 +25,12 @@ function uploadImage({ canvas, section, distance }) {
 
 export default function({ keypoints, label, counter }) {
   const canvas = useCanvas()
-  const { count, distance } = useCounter({ keypoints, counter })
+  const { distance } = useCounter({ keypoints, counter })
   useEffect(() => {
     if (!distance) {
       return
     }
+    console.log("date 2: ", new Date().getTime())
     uploadImage({ canvas, distance, section: label })
   }, [canvas, distance, label])
   return <></>
